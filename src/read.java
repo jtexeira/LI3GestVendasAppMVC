@@ -7,20 +7,22 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static java.lang.System.out;
 public class read {
     public static void main(String[] args) {
         Crono.start();
-        readLinesWithBR("db/Vendas_3M.txt");
+        readLinesWithBR("db/Vendas_1M.txt");
         out.println(Crono.print());
         Crono.start();
-        readWithFiles("db/Vendas_3M.txt");
+        readWithFiles("db/Vendas_1M.txt");
         out.println(Crono.print());
 
     }
 
-    public static List<String> readLinesWithBR(String fichtxt) {
+    public static List<IVenda> readLinesWithBR(String fichtxt) {
         List<String> linhas = new ArrayList<>();
         BufferedReader inFile = null;
         String linha = null;
@@ -32,17 +34,35 @@ public class read {
         catch(IOException e) {
             out.println(e);
         }
-        return linhas;
+        return getVendas(linhas);
+
     }
 
-    public static List<String> readWithFiles(String fichtxt) {
+    public static List<IVenda> readWithFiles(String fichtxt) {
         List<String> linhas = new ArrayList<>();
+        List<String> clientes = new ArrayList<>();
+        List<String> produtos = new ArrayList<>();
         try {
             linhas = Files.readAllLines(Paths.get(fichtxt), StandardCharsets.UTF_8);
+            clientes = Files.readAllLines(Paths.get("db/Clientes.txt"), StandardCharsets.UTF_8);
+            produtos = Files.readAllLines(Paths.get("db/Produtos.txt"), StandardCharsets.UTF_8);
         }
         catch(IOException e) {
             out.println(e);
         }
-        return linhas;
+        out.println(clientes.stream().map(Client::new).filter(Client::verifyClient).collect(Collectors.toList()).size());
+        out.println(produtos.stream().map(Product::new).filter(Product::verifyProduct).collect(Collectors.toList()).size());
+        return getVendas(linhas);
+    }
+
+    private static List<IVenda> getVendas(List<String> linhas) {
+        List<IVenda> linhasR = linhas
+                .stream()
+                .map(Venda::new)
+                .filter(Venda::validSale)
+                .collect(Collectors
+                        .toList());
+        out.println(linhasR.size());
+        return linhasR;
     }
 }
