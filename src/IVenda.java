@@ -1,3 +1,5 @@
 public interface IVenda {
-    public double totalSale();
+    double totalSale();
+
+    boolean validSale();
 }

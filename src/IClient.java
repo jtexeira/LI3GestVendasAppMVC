@@ -1,3 +1,7 @@
 public interface IClient {
-    public boolean verifyClient();
+    boolean verifyClient();
+
+    String getId();
+
+    IClient clone();
 }
