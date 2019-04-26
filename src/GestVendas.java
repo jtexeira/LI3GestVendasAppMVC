@@ -20,8 +20,12 @@ public class GestVendas {
                     .readAllLines(Paths.get(sales), StandardCharsets.UTF_8)
                     .stream()
                     .map(Venda::new)
+                    .filter(Venda::validSale)
+                    .filter(e -> catProds.exists(e.getCodProd())
+                            && catCli.exists(e.getCodCli()))
                     .collect(Collectors
                             .toList());
+            out.println(vendas.size());
         }
         catch(IOException e) {
             out.println(e);

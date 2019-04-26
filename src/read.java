@@ -14,10 +14,7 @@ import static java.lang.System.out;
 public class read {
     public static void main(String[] args) {
         Crono.start();
-        readLinesWithBR("db/Vendas_1M.txt");
-        out.println(Crono.print());
-        Crono.start();
-        readWithFiles("db/Vendas_1M.txt");
+        GestVendas a = new GestVendas("db/Clientes.txt", "db/Produtos.txt", "db/Vendas_1M.txt");
         out.println(Crono.print());
 
     }
