@@ -24,6 +24,7 @@ public class Table<T> {
 
     @Override
     public String toString() {
+        builder.setLength(0);
         int col = this.linLabl.size();
         int lin = this.linLabl.size();
         StringBetter spac = new StringBetter(" ");
