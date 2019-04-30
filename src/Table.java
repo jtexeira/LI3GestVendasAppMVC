@@ -8,7 +8,7 @@ public class Table<T> {
     private final ArrayList<ArrayList<T>> iT;
     private final StringBuilder builder;
 
-    public Table(ArrayList<String> linLabel, ArrayList<String> colLabel, ArrayList<ArrayList<T>> iT) {
+    public Table(ArrayList<ArrayList<T>> iT, ArrayList<String> linLabel, ArrayList<String> colLabel) {
         this.linLabl = linLabel;
         this.colLabl = colLabel;
         this.iT = iT;
@@ -17,15 +17,15 @@ public class Table<T> {
 
     private void printSeparatorLine(int[] sizeCols) {
         StringBetter sif = new StringBetter("-");
-        for (int j = 0; j <= sizeCols.length; j++)
-            builder.append("+").append(sif.repeate(sizeCols[j]).toString());
-        builder.append("+\n");
+        for (int j = 0; j <= sizeCols.length - 1; j++)
+            this.builder.append("+").append(sif.repeate(sizeCols[j]).toString());
+        this.builder.append("+\n");
     }
 
     @Override
     public String toString() {
         builder.setLength(0);
-        int col = this.linLabl.size();
+        int col = this.colLabl.size();
         int lin = this.linLabl.size();
         StringBetter spac = new StringBetter(" ");
 
@@ -42,26 +42,26 @@ public class Table<T> {
         }
 
         /*print label row*/
-        printSeparatorLine(sizeCols);
-        builder.append("|\n");
+        this.printSeparatorLine(sizeCols);
+        builder.append("|");
         builder.append(spac.repeate(sizeCols[0]));
         for (int j = 0; j < col; j++) {
-            builder.append("| ").append(this.colLabl.get(j)).append("\n");
+            builder.append("| ").append(this.colLabl.get(j));
             builder.append(spac.repeate(sizeCols[j + 1] - this.colLabl.get(j).length() - 1));
         }
         builder.append("|\n");
-        printSeparatorLine(sizeCols);
+        this.printSeparatorLine(sizeCols);
 
         /* print contents*/
         for (int i = 0; i < lin; i++) {
-            builder.append("| ").append(this.linLabl.get(i)).append("\n");
+            builder.append("| ").append(this.linLabl.get(i));
             builder.append(spac.repeate(sizeCols[0] - this.linLabl.get(i).length() - 1));
             for (int j = 0; j < col; j++) {
-                builder.append("| ").append(this.iT.get(i).get(j).toString()).append("\n");
+                builder.append("| ").append(this.iT.get(i).get(j).toString());
                 builder.append(spac.repeate(sizeCols[j + 1] - this.iT.get(i).get(j).toString().length() - 1));
             }
             builder.append("|\n");
-            printSeparatorLine(sizeCols);
+            this.printSeparatorLine(sizeCols);
         }
 
         return builder.toString();
