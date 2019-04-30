@@ -21,9 +21,7 @@ public class Main {
         ArrayList<String> strings = new ArrayList<>();
         for(int i = 0; i < 2000; i++)
             strings.add("olaaa");
-        Navigator<String> nav = new Navigator<>(strings, 20, 3);
-        System.out.println(nav);
-        nav.next();
+        Navigator<String> nav = new Navigator<>(strings, 20);
         System.out.println(nav);
     }
 }
