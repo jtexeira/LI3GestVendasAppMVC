@@ -37,6 +37,13 @@ public class Menu {
         this.correctMenu();
     }
 
+    public Menu(MenuInd menuInd) {
+        this.menu = menuInd;
+        this.prev = new Stack<MenuInd>();
+        this.options = new ArrayList<>();
+        this.correctMenu();
+    }
+
     public void back(){
         if (this.prev.size() > 0) {
             this.menu = this.prev.pop();
@@ -45,12 +52,13 @@ public class Menu {
     }
 
     public void selectOption(int i){
-        if (this.options.size() < i) {
+        if (this.options.size() > i - 1) {
             this.prev.push(this.menu);
-            this.menu = this.options.get(i);
+            this.menu = this.options.get(i - 1);
             this.correctMenu();
         }
     }
+
 
     @Override
     public String toString() {
@@ -58,14 +66,14 @@ public class Menu {
         StringBetter strB = new StringBetter("\t--");
 
         for (MenuInd val : this.prev)
-            strB.append(val.name()).append("--\n");
+            strB.append(val.name()).append("/");
 
-        s.append(strB.red().toString())
+        s.append(strB.append(this.menu.name()).append("--\n").red().toString())
                 .append("\n")
                 .append(this.menuString)
                 .append("\n\n");
         for(int i = 0; i < this.options.size(); i++)
-            s.append(i).append("- ").append(this.menuOptionText(i)).append("\n");
+            s.append(i + 1).append("- ").append(this.menuOptionText(i)).append("\n");
         s.append("\n");
         return s.toString();
     }

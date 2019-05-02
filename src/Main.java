@@ -1,10 +1,14 @@
+import View.Menu;
 import View.Navigator;
 import View.Table;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         ArrayList<ArrayList<String>> matrix = new ArrayList<>();
         ArrayList<String> line  = new ArrayList<>();
         ArrayList<String> linLabel = new ArrayList<>();
@@ -18,14 +22,16 @@ public class Main {
             linLabel.add("ola");
         }
         Table<String> tab = new Table<>(matrix, linLabel, colLabel );
-        System.out.println(tab);
-
 
         ArrayList<String> strings = new ArrayList<>();
         for(int i = 0; i < 2000; i++)
             strings.add("olaaa");
         Navigator<String> nav = new Navigator<>(strings, 20);
-        while(true)
-            System.out.println(nav);
+
+        Menu menu = new Menu();
+        while(true) {
+            System.out.println(menu);
+            menu.selectOption(scanner.nextInt());
+        }
     }
 }
