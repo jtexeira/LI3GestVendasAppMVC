@@ -1,3 +1,6 @@
+import View.Navigator;
+import View.Table;
+
 import java.util.ArrayList;
 
 public class Main {
@@ -22,6 +25,7 @@ public class Main {
         for(int i = 0; i < 2000; i++)
             strings.add("olaaa");
         Navigator<String> nav = new Navigator<>(strings, 20);
-        System.out.println(nav);
+        while(true)
+            System.out.println(nav);
     }
 }

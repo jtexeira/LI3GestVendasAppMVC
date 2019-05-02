@@ -1,3 +1,6 @@
+package View;
+
+import Utils.StringBetter;
 import Utils.Terminal;
 
 import java.util.ArrayList;
