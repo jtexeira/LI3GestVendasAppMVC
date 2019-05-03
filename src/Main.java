@@ -5,6 +5,8 @@ import View.Table;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static java.lang.System.out;
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -34,10 +36,9 @@ public class Main {
 
         Menu menu = new Menu();
         while(true) {
-            System.out.println(nav);
-            //System.out.print("\033\143");
-            //System.out.println(menu);
-            //menu.parser(scanner.nextLine());
+            out.print("\033\143");
+            out.println(menu);
+            menu.parser(scanner.nextLine());
         }
     }
 }
