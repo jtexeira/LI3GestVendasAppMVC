@@ -24,15 +24,20 @@ public class Main {
         Table<String> tab = new Table<>(matrix, linLabel, colLabel );
 
         ArrayList<String> strings = new ArrayList<>();
-        for(int i = 0; i < 2000; i++)
-            strings.add("olaaa");
+        for(int i = 0; i < 2000; i++) {
+            strings.add("olaa");
+            strings.add("aí");
+            strings.add("general");
+            strings.add("robertoni");
+        }
         Navigator<String> nav = new Navigator<>(strings,20);
 
         Menu menu = new Menu();
         while(true) {
-            System.out.print("\033\143");
-            System.out.println(menu);
-            menu.selectOption(scanner.nextInt());
+            System.out.println(nav);
+            //System.out.print("\033\143");
+            //System.out.println(menu);
+            //menu.parser(scanner.nextLine());
         }
     }
 }

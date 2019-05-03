@@ -44,19 +44,34 @@ public class Menu {
         this.correctMenu();
     }
 
-    public void back(){
-        if (this.prev.size() > 0) {
-            this.menu = this.prev.pop();
-            this.correctMenu();
+    public Menu parser(String str){
+        if (str.matches("^[+-]?\\d+$")) {
+            this.selectOption(Integer.parseInt(str));
         }
+        switch (str){
+            case "b":
+            case "..":
+                this.back();
+        }
+
+        return this;
     }
 
-    public void selectOption(int i){
+    public Menu selectOption(int i){
         if (this.options.size() > i - 1) {
             this.prev.push(this.menu);
             this.menu = this.options.get(i - 1);
             this.correctMenu();
         }
+        return this;
+    }
+
+    public Menu back(){
+        if (this.prev.size() > 0) {
+            this.menu = this.prev.pop();
+            this.correctMenu();
+        }
+        return this;
     }
 
 
@@ -124,7 +139,7 @@ public class Menu {
                 r += "Stats de ficheiros lidos";
                 break;
             case Q1_2:
-                r += "stats globais";
+                r += "Stats globais";
                 break;
         }
         return r;
