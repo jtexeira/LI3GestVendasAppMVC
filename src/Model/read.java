@@ -1,3 +1,6 @@
+package Model;
+
+import Model.*;
 import Utils.Crono;
 
 import java.io.BufferedReader;
