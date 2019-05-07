@@ -1,3 +1,5 @@
+package Model;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -11,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.System.out;
 
-public class CatCli implements ICatCli{
+public class CatCli implements ICatCli {
     private Map<String, IClient> catCli;
 
     public CatCli() {

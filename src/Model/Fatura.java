@@ -1,3 +1,5 @@
+package Model;
+
 public class Fatura implements IFatura {
     private String prodId;
     private int[][] nVendas; //mes filial

@@ -1,3 +1,8 @@
+package Model;
+
+import Model.*;
+import Utils.Crono;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

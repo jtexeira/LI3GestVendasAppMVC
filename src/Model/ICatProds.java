@@ -1,13 +1,15 @@
+package Model;
+
 import java.util.List;
 
 public interface ICatProds {
-    boolean exists(IProduct p);
+    public boolean exists(IProduct p);
 
-    boolean exists(String p);
+    public boolean exists(String p);
 
-    ICatProds add(IProduct p);
+    public ICatProds add(IProduct p);
 
-    int howMany();
+    public int howMany();
 
-    List<IProduct> productList();
+    public List<IProduct> productList();
 }
