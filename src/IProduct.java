@@ -1,9 +1,7 @@
 public interface IProduct {
-    public boolean verifyProduct();
+    boolean verifyProduct();
 
-    public String getId();
+    String getId();
 
-    public IProduct clone();
-
-    public IProduct fromString(String s);
+    IProduct clone();
 }

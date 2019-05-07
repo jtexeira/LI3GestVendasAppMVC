@@ -5,6 +5,10 @@ public class Product implements IProduct{
         this.id = id;
     }
 
+    public Product(Product a) {
+        this.id = a.getId();
+    }
+
     public String getId() {
         return this.id;
     }
@@ -14,10 +18,6 @@ public class Product implements IProduct{
     }
 
     public IProduct clone() {
-        return new Product(this.id);
-    }
-
-    public IProduct fromString(String s) {
-        return new Product(s);
+        return new Product(this);
     }
 }
