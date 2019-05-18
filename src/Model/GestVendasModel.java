@@ -12,7 +12,7 @@ public class GestVendasModel {
     ICatCli catCli;
     ICatProds catProds;
     List<IVenda> vendas;
-
+    Faturacao faturacao;
 
     public GestVendasModel(String clients, String products, String sales) {
         this.catCli = new CatCli(clients);
@@ -32,6 +32,10 @@ public class GestVendasModel {
         catch(IOException e) {
             out.println(e);
         }
+
+        faturacao = new Faturacao(catProds);
+        faturacao.syncWithSales(vendas);
+        out.println(faturacao.totalFaturado());
     }
 
     public GestVendasModel() {
