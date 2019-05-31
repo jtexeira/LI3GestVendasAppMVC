@@ -12,4 +12,6 @@ public interface IVenda {
     int getQuant();
 
     String getCodProd();
+
+    String getCodCli();
 }
