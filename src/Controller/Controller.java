@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.GestVendas;
+import Model.GestVendasModel;
 import Utils.Crono;
 import View.Menu;
 import View.Navigator;
@@ -11,12 +11,12 @@ import java.util.Scanner;
 import static java.lang.System.out;
 
 public class Controller {
-    Menu menu;
-    GestVendas gestvendas;
-    Crono cronoLoad;
-    Crono crono;
+    private Menu menu;
+    private GestVendasModel gestvendas;
+    private Crono cronoLoad;
+    private Crono crono;
 
-    public Controller(Menu view, GestVendas model, Crono crono) {
+    public Controller(Menu view, GestVendasModel model, Crono crono) {
         this.menu = view;
         this.gestvendas = model;
         this.cronoLoad = crono;

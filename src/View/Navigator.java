@@ -41,20 +41,6 @@ public class Navigator<T> implements INavigator{
         this.page = (page - 1 >= 0)?page -1 : page;
     }
 
-    /*
-    public void moreLines() {
-        this.pageSize++;
-        this.update();
-    }
-
-    public void lessLines() {
-        if(this.pageSize > 1) {
-            this.pageSize--;
-            this.update();
-        }
-    }
-    */
-
     private void update(){
         term.update();
         this.pageSize = this.term.getLines() - 7;
