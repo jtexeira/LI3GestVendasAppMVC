@@ -40,6 +40,6 @@ public class Crono {
   @Override
   public String toString() {
       long elapsedTime = this.fim - this.inicio;
-      return "" + (elapsedTime / 1.0E09);
+      return String.format("%.2f",elapsedTime / 1.0E06) + "ms";
   }
 }

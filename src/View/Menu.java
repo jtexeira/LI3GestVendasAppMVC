@@ -2,22 +2,56 @@ package View;
 import Utils.StringBetter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
 import static java.lang.System.out;
 
-public class Menu implements IMenu{
+public class Menu{
     private MenuInd menu;
     private Stack<MenuInd> prev;
     private ArrayList<MenuInd> options;
     private boolean run;
 
+    public enum MenuInd {
+        Categories,
+        Static,
+        Dynamic,
+        Q1,
+        Q2,
+        Q3,
+        Q4,
+        Q5,
+        Q6,
+        Q7,
+        Q8,
+        Q9,
+        Q10,
+        Q1_1,
+        Q1_2
+    }
+
+    public Menu() {
+        this.menu = MenuInd.Categories;
+        this.prev = new Stack<>();
+        this.options = new ArrayList<>();
+        this.run = true;
+        this.correctMenu();
+    }
+
+    public boolean getRun() {
+        return this.run;
+    }
+
+    public MenuInd getMenu() {
+        return this.menu;
+    }
+
     public <T> void menuNavigator(Navigator<T> nav){
         Scanner scanner = new Scanner(System.in);
         while(true){
-            out.print("\033\143");
-            out.println(this.createHeader());
+            this.displayMenuHeader("");
             out.println(nav);
             switch (scanner.next().trim().charAt(0)){
                 case 'n':
@@ -53,30 +87,11 @@ public class Menu implements IMenu{
         }
     }
 
-    public enum MenuInd {
-        Categories,
-        Static,
-        Dynamic,
-        Q1,
-        Q2,
-        Q3,
-        Q4,
-        Q5,
-        Q6,
-        Q7,
-        Q8,
-        Q9,
-        Q10,
-        Q1_1,
-        Q1_2
-    }
-
-    public Menu() {
-        this.menu = MenuInd.Categories;
-        this.prev = new Stack<>();
-        this.options = new ArrayList<>();
-        this.run = true;
-        this.correctMenu();
+    public int getInputInteiro(String error, String text){
+        Scanner scanner = new Scanner(System.in);
+        this.displayMenuHeader(error);
+        out.println(text);
+        return scanner.nextInt();
     }
 
     public Menu(MenuInd menuInd) {
@@ -87,11 +102,8 @@ public class Menu implements IMenu{
         this.correctMenu();
     }
 
-    public MenuInd getMenu() {
-        return this.menu;
-    }
-
-    public Menu parser(String str){
+    public Menu parser(){
+        String str = new Scanner(System.in).nextLine();
         if (str.matches("^[+-]?\\d{1,8}$")) {
             this.selectOption(Integer.parseInt(str));
         }
@@ -106,10 +118,6 @@ public class Menu implements IMenu{
         }
 
         return this;
-    }
-
-    public boolean getRun() {
-        return this.run;
     }
 
     public Menu selectOption(int i){
@@ -132,12 +140,24 @@ public class Menu implements IMenu{
         return this;
     }
 
+    public void showQ7(List<String> clis, String time){
+        this.displayMenuHeader("Tempo demorado: " + time);
+        out.println();
+        out.println("3 melhores clientes:");
+        out.println();
+        for(int i = 0; i < clis.size() && i < 3; i++){
+            out.println((i + 1) + "º " + clis.get(i));
+        }
+
+        new Scanner(System.in).nextLine();
+
+    }
+
     private void displayMenuHeader(String error) {
         out.print("\033\143");
         out.println(this.createHeader());
         out.println(new StringBetter(error).under().toString());
     }
-
 
     private String createHeader(){
         StringBetter strHeader = new StringBetter("\t--");
@@ -145,18 +165,6 @@ public class Menu implements IMenu{
             strHeader.append(val.name()).append("/");
 
         return strHeader.append(this.menu.name()).append("--\n").red().toString();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("\033\143");
-        s.append(this.createHeader()).append("\n\n");
-
-        for(int i = 0; i < this.options.size(); i++)
-            s.append(i + 1).append("- ").append(this.menuOptionText(i)).append("\n");
-        s.append("\n");
-        return s.toString();
     }
 
     private String menuOptionText(int i) {
@@ -222,5 +230,17 @@ public class Menu implements IMenu{
                 this.options.add(MenuInd.Q10);
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append("\033\143");
+        s.append(this.createHeader()).append("\n\n");
+
+        for(int i = 0; i < this.options.size(); i++)
+            s.append(i + 1).append("- ").append(this.menuOptionText(i)).append("\n");
+        s.append("\n");
+        return s.toString();
     }
 }
