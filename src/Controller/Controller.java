@@ -33,7 +33,9 @@ public class Controller {
             switch (menu.getMenu()) {
                 case Q1:
                     this.crono.start();
+                    List <String> prodsNComprados = this.model.listaDeProdutosNaoComprados();
                     this.crono.stop();
+                    this.menu.showQ1(prodsNComprados, this.crono.toString());
                     break;
                 case Q2:
                     this.crono.start();

@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.Stack;
 
 import static java.lang.System.out;
+import static java.lang.System.setIn;
 
 public class Menu{
     private MenuInd menu;
@@ -46,25 +47,6 @@ public class Menu{
 
     public MenuInd getMenu() {
         return this.menu;
-    }
-
-    public <T> void menuNavigator(Navigator<T> nav){
-        Scanner scanner = new Scanner(System.in);
-        while(true){
-            this.displayMenuHeader("");
-            out.println(nav);
-            switch (scanner.next().trim().charAt(0)){
-                case 'n':
-                    nav.next();
-                    break;
-                case 'p':
-                    nav.previous();
-                    break;
-                case 'b':
-                    this.back();
-                    return;
-            }
-        }
     }
 
     public int getInputMes(){
@@ -140,6 +122,13 @@ public class Menu{
         return this;
     }
 
+    public void showQ1(List<String> notBought, String time){
+        Navigator<String> nav = new Navigator<>(notBought);
+        out.println(notBought.size());
+        new Scanner(System.in).nextLine();
+        this.menuNavigator(nav, time,"Clientes que não compraram");
+    }
+
     public void showQ7(List<String> clis, String time){
         this.displayMenuHeader("Tempo demorado: " + time);
         out.println();
@@ -165,6 +154,26 @@ public class Menu{
             strHeader.append(val.name()).append("/");
 
         return strHeader.append(this.menu.name()).append("--\n").red().toString();
+    }
+
+    private <T> void menuNavigator(Navigator<T> nav, String time, String title){
+        Scanner scanner = new Scanner(System.in);
+        while(true){
+            this.displayMenuHeader(time);
+            out.println(title);
+            out.println(nav);
+            switch (scanner.next().trim().charAt(0)){
+                case 'n':
+                    nav.next();
+                    break;
+                case 'p':
+                    nav.previous();
+                    break;
+                case 'b':
+                    this.back();
+                    return;
+            }
+        }
     }
 
     private String menuOptionText(int i) {
