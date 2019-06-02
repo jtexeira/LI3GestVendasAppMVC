@@ -181,6 +181,17 @@ public class Menu{
         new Scanner(System.in).nextLine();
     }
 
+    public void showQ9(List<List<String>> clis, String time){
+        List<String> colLabl = new ArrayList<>();
+        colLabl.add("Cliente");
+        colLabl.add("Total Gasto");
+
+        this.displayMenuHeader(time);
+        out.println(this.defaultTable(colLabl, clis));
+
+        new Scanner(System.in).nextLine();
+    }
+
     private <T> Table defaultTable(List <String> colLabl, List<List <T>> vals){
         List<String> linLabl = new ArrayList<>();
         for(int i = 0; i < vals.size(); i++)

@@ -1,6 +1,7 @@
 package Controller;
 
 import Exceptions.InvalidFilialException;
+import Exceptions.InvalidProductExecption;
 import Exceptions.IvalidClientException;
 import Exceptions.MesInvalidoException;
 import Model.Constantes;
@@ -135,8 +136,27 @@ public class Controller {
                     break;
 
                 case Q9:
-                    this.crono.start();
-                    this.crono.stop();
+                    try{
+                        String prodBougth = this.menu.getInputString(error, "Produto a pesquisar:");
+                        int nProdBrougth = this.menu.getInputInteiro(error, "Número de clientes a pesquisar:");
+                        this.crono.start();
+                        List<Map.Entry<String,Double>> highestBuyer = this.model.clientesQueMaisCompraram(prodBougth, nProdBrougth);
+                        this.crono.stop();
+                        this.menu.showQ9(
+                                highestBuyer
+                                        .stream()
+                                        .map(e -> {
+                                            List<String> a = new ArrayList<>();
+                                            a.add(e.getKey());
+                                            a.add(String.format("%.2f", e.getValue()));
+                                            return a;})
+                                        .collect(Collectors.toList()),
+                                this.crono.toString());
+                        this.menu.back();
+                        error = "";
+                    }
+                    catch (InputMismatchException e) {error = "Invalid input";}
+                    catch (InvalidProductExecption e) {error = "Produto Inválido";}
                     break;
 
                 case Q10:
