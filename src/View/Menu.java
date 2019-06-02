@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.System.out;
-import static java.lang.System.setIn;
 
 public class Menu{
     private MenuInd menu;
@@ -47,27 +46,7 @@ public class Menu{
         return this.menu;
     }
 
-    public int getInputMes(){
-        Scanner scanner = new Scanner(System.in);
-        String str;
-        boolean error = false;
-        while(true){
-            out.print("\033\143");
-            out.println(this.createHeader());
-            if (error)
-                out.println(new StringBetter("Mês Inválido").under().toString());
-            else
-                out.println();
-            out.println("Inserir Mês: ");
-            str = scanner.nextLine();
-            if (str.matches("^[1-9]|1[0-2]$"))
-                return Integer.parseInt(str);
-            else
-                error = true;
-        }
-    }
-
-    public int getInputInteiro(String error, String text){
+    public int getInputInt(String error, String text){
         Scanner scanner = new Scanner(System.in);
         this.displayMenuHeader(error);
         out.println(text);
@@ -79,14 +58,6 @@ public class Menu{
         this.displayMenuHeader(error);
         out.println(text);
         return scanner.nextLine();
-    }
-
-    public Menu(MenuInd menuInd) {
-        this.menu = menuInd;
-        this.prev = new Stack<>();
-        this.options = new ArrayList<>();
-        this.run = true;
-        this.correctMenu();
     }
 
     public Menu parser(){
@@ -107,7 +78,7 @@ public class Menu{
         return this;
     }
 
-    public Menu selectOption(int i){
+    private Menu selectOption(int i){
         if (this.options.size() > i - 1) {
             this.prev.push(this.menu);
             this.menu = this.options.get(i - 1);
@@ -139,10 +110,10 @@ public class Menu{
         new Scanner(System.in).nextLine();
     }
 
-    public void showQ5(List<String> prodsCli, String cliente, String time){
+    public void showQ5(List<String> prodsCli, String client, String time){
         this.displayMenuHeader(time);
         Navigator<String> nav = new Navigator<>(prodsCli);
-        this.menuNavigator(nav, time,"Produtos mais comprados por " + cliente);
+        this.menuNavigator(nav, time,"Produtos mais comprados por " + client);
     }
 
     public void showQ6(List<List<String>> prodsM, String time){

@@ -44,7 +44,7 @@ public class Controller {
 
                 case Q2:
                     try {
-                        int mesSales = this.menu.getInputInteiro(error, "Mês a pesquisar:");
+                        int mesSales = this.menu.getInputInt(error, "Mês a pesquisar:");
                         this.crono.start();
                         Map.Entry<Integer, Integer> tSales = this.model.clientesVendasTotais(mesSales);
                         this.crono.stop();
@@ -88,7 +88,7 @@ public class Controller {
 
                 case Q6:
                     try {
-                        int nProdVend = this.menu.getInputInteiro(error, "Número de Produtos a Pesquisar:");
+                        int nProdVend = this.menu.getInputInt(error, "Número de Produtos a Pesquisar:");
                         this.crono.start();
                         List<Map.Entry<String, Integer>> prods = this.model.produtosMaisVendidos(nProdVend);
                         this.crono.stop();
@@ -107,7 +107,7 @@ public class Controller {
 
                 case Q7:
                     try{
-                        int filN = this.menu.getInputInteiro(
+                        int filN = this.menu.getInputInt(
                                 error,
                                 "Inserir Filial [1-" + this.constantes.numeroFiliais() + "]:");
                         this.crono.start();
@@ -123,7 +123,7 @@ public class Controller {
 
                 case Q8:
                     try {
-                        int nCliSearch = this.menu.getInputInteiro(error, "Número de Clientes a pesquisar:");
+                        int nCliSearch = this.menu.getInputInt(error, "Número de Clientes a pesquisar:");
                         this.crono.start();
                         List<String> clisDiverse = this.model.clientesComMaisDiversidade(nCliSearch);
                         this.crono.stop();
@@ -138,7 +138,7 @@ public class Controller {
                 case Q9:
                     try{
                         String prodBougth = this.menu.getInputString(error, "Produto a pesquisar:");
-                        int nProdBrougth = this.menu.getInputInteiro(error, "Número de clientes a pesquisar:");
+                        int nProdBrougth = this.menu.getInputInt(error, "Número de clientes a pesquisar:");
                         this.crono.start();
                         List<Map.Entry<String,Double>> highestBuyer = this.model.clientesQueMaisCompraram(prodBougth, nProdBrougth);
                         this.crono.stop();
