@@ -133,15 +133,5 @@ public class GestVendasModel {
     }
 
 
-   /* //query 8
-    public List<String> clientesComMaisDiversidade(int limite) {
-        List<Map<String, Set<String>>> a = new ArrayList<>();
-        for(Filial x : this.filiais) {
-            a.add(x.maisDiversidadeDeProdutos());
-        }
-        a.stream()
-                .flatMap(e -> e.keySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Set::add))
-    }
-    */
+
 }
