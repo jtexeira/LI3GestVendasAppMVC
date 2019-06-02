@@ -72,7 +72,6 @@ public class Controller {
                     }
                     catch (IvalidClientException e) { error = "Cliente Inválido"; }
                     catch (MesInvalidoException | InputMismatchException e) { error = "Mês Inválido"; }
-
                     break;
 
                 case Q4:
@@ -91,7 +90,6 @@ public class Controller {
                     }
                     catch (InvalidProductExecption e) { error = "Produto Inválido"; }
                     catch (MesInvalidoException | InputMismatchException e) { error = "Mês Inválido"; }
-
                     break;
 
                 case Q5:
@@ -188,8 +186,24 @@ public class Controller {
                     break;
 
                 case Q10:
-                    this.crono.start();
-                    this.crono.stop();
+                    try{
+                        int mes = this.menu.getInputInt(error, "Mês a pesquisar:");
+                        int filial = this.menu.getInputInt(
+                                error,
+                                "Filial a pesquisar [1-" + this.constantes.numeroFiliais() + "]:");
+
+                        this.crono.start();
+                        Map<String, Double> fatTotal = this.model.faturacaoProd(mes, filial);
+                        this.crono.stop();
+
+                        this.menu.showQ10(fatTotal, mes, filial, this.crono.toString());
+
+                        this.menu.back();
+                        error = "";
+
+                    }
+                    catch (InvalidFilialException e) { error = "Filial Inválida"; }
+                    catch (MesInvalidoException e)     { error = "Mês inválido"; }
                     break;
 
                 case Q1_1:

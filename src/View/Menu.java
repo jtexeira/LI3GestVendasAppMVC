@@ -215,6 +215,15 @@ public class Menu{
         new Scanner(System.in).nextLine();
     }
 
+    public void showQ10(Map<String, Double> fatTotal, int mes, int filial, String time){
+        List<String> lines = new ArrayList<>();
+        for (String key : fatTotal.keySet())
+            lines.add(key + " [" + String.format("%.2f", fatTotal.get(key)) + "]");
+
+        Navigator<String> nav = new Navigator<>(lines);
+        this.menuNavigator(nav, time, "Faturação total no mês [" + mes + "] na filial [" + filial + "]:");
+    }
+
     private <T> Table defaultTable(List <String> colLabl, List<List <T>> vals){
         List<String> linLabl = new ArrayList<>();
         for(int i = 0; i < vals.size(); i++)
