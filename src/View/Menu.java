@@ -1,10 +1,7 @@
 package View;
 import Utils.StringBetter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 import static java.lang.System.out;
 import static java.lang.System.setIn;
@@ -124,9 +121,14 @@ public class Menu{
 
     public void showQ1(List<String> notBought, String time){
         Navigator<String> nav = new Navigator<>(notBought);
-        out.println(notBought.size());
-        new Scanner(System.in).nextLine();
         this.menuNavigator(nav, time,"Clientes que não compraram");
+    }
+
+    public void showQ2(Map.Entry<Integer, Integer> sales, int mesSales, String time){
+        this.displayMenuHeader(time);
+        out.println("Vendas no mês [" + mesSales + "]: " + sales.getKey());
+        out.println("Clientes no mês [" + mesSales + "]: " + sales.getValue());
+        new Scanner(System.in).nextLine();
     }
 
     public void showQ7(List<String> clis, String time){

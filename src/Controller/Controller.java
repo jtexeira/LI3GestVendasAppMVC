@@ -1,6 +1,7 @@
 package Controller;
 
 import Exceptions.InvalidFilialException;
+import Exceptions.MesInvalidoException;
 import Model.Constantes;
 import Model.GestVendasModel;
 import Utils.Crono;
@@ -8,6 +9,7 @@ import View.Menu;
 
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import static java.lang.System.out;
@@ -36,10 +38,21 @@ public class Controller {
                     List <String> prodsNComprados = this.model.listaDeProdutosNaoComprados();
                     this.crono.stop();
                     this.menu.showQ1(prodsNComprados, this.crono.toString());
+                    this.menu.back();
+                    error = "";
                     break;
                 case Q2:
-                    this.crono.start();
-                    this.crono.stop();
+                    try {
+                        int mesSales = this.menu.getInputInteiro(error, "Mês a pesquisar:");
+                        this.crono.start();
+                        Map.Entry<Integer, Integer> tSales = this.model.clientesVendasTotais(mesSales);
+                        this.crono.stop();
+                        this.menu.showQ2(tSales, mesSales, this.crono.toString());
+                        this.menu.back();
+                        error = "";
+                    }
+                    catch (InputMismatchException e) { error = "Input is not a number"; }
+                    catch (MesInvalidoException e) {error = "Mes Invalido"; }
                     
                     break;
                 case Q3:
@@ -72,6 +85,7 @@ public class Controller {
                         this.crono.stop();
                         this.menu.showQ7(clis, this.crono.toString());
                         this.menu.back();
+                        error = "";
                     }
                     catch (InputMismatchException e) { error = "Input is not a number"; }
                     catch (InvalidFilialException e) { error = "Número de Filial Inválido"; }

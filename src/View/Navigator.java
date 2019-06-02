@@ -39,7 +39,7 @@ public class Navigator<T> implements INavigator{
 
     private void update(){
         term.update();
-        this.pageSize = this.term.getLines() - 9;
+        this.pageSize = this.term.getLines() - 10;
         if (this.pageSize < 1)
             this.pageSize = 1;
         this.nCols = 1;
