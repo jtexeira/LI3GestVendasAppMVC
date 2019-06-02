@@ -73,6 +73,13 @@ public class Menu{
         return scanner.nextInt();
     }
 
+    public String getInputString(String error, String text){
+        Scanner scanner = new Scanner(System.in);
+        this.displayMenuHeader(error);
+        out.println(text);
+        return scanner.nextLine();
+    }
+
     public Menu(MenuInd menuInd) {
         this.menu = menuInd;
         this.prev = new Stack<>();
@@ -131,6 +138,23 @@ public class Menu{
         new Scanner(System.in).nextLine();
     }
 
+    public void showQ5(List<String> prodsCli, String cliente, String time){
+        this.displayMenuHeader(time);
+        Navigator<String> nav = new Navigator<>(prodsCli);
+        this.menuNavigator(nav, time,"Produtos mais comprados por " + cliente);
+    }
+
+    public void showQ6(List<List<String>> prodsM, String time){
+        List<String> colLabl = new ArrayList<>();
+        colLabl.add("Produto");
+        colLabl.add("Clientes que compraram");
+
+        this.displayMenuHeader(time);
+        out.println(this.defaultTable(colLabl, prodsM));
+
+        new Scanner(System.in).nextLine();
+    }
+
     public void showQ7(List<String> clis, String time){
         this.displayMenuHeader("Tempo demorado: " + time);
         out.println();
@@ -142,6 +166,13 @@ public class Menu{
 
         new Scanner(System.in).nextLine();
 
+    }
+
+    private <T> Table defaultTable(List <String> colLabl, List<List <T>> vals){
+        List<String> linLabl = new ArrayList<>();
+        for(int i = 0; i < vals.size(); i++)
+            linLabl.add((i +1) + "º");
+        return new Table<>(vals, linLabl, colLabl);
     }
 
     private void displayMenuHeader(String error) {
