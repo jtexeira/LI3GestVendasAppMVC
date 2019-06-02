@@ -110,6 +110,58 @@ public class Menu{
         new Scanner(System.in).nextLine();
     }
 
+    public void showQ3(String client, int mes, Map.Entry<Integer, Map.Entry<Integer, Double>> cliStats, String time){
+        List<String> colLabl = new ArrayList<>();
+        colLabl.add("produtos comprados");
+        colLabl.add("n compras");
+        colLabl.add("Total gasto");
+
+        List<String> linLabl = new ArrayList<>();
+        linLabl.add(client);
+
+        List<String> valLine = new ArrayList<>();
+        valLine.add(cliStats.getKey().toString());
+        valLine.add(cliStats.getValue().getKey().toString());
+        valLine.add(String.format("%.2f", cliStats.getValue().getValue()));
+
+        List<List<String>> val = new ArrayList<>();
+        val.add(valLine);
+
+        Table<String> tab = new Table<>(val, linLabl, colLabl);
+
+        this.displayMenuHeader(time);
+        out.println("Mês [" + mes + "]:");
+        out.println(tab);
+
+        new Scanner(System.in).nextLine();
+    }
+
+    public void showQ4(String produto, int mes, Map.Entry<Integer, Map.Entry<Integer, Double>> prodStats, String time){
+        List<String> colLabl = new ArrayList<>();
+        colLabl.add("Clientes que compraram");
+        colLabl.add("n compras");
+        colLabl.add("Total gasto");
+
+        List<String> linLabl = new ArrayList<>();
+        linLabl.add(produto);
+
+        List<String> valLine = new ArrayList<>();
+        valLine.add(prodStats.getKey().toString());
+        valLine.add(prodStats.getValue().getKey().toString());
+        valLine.add(String.format("%.2f", prodStats.getValue().getValue()));
+
+        List<List<String>> val = new ArrayList<>();
+        val.add(valLine);
+
+        Table<String> tab = new Table<>(val, linLabl, colLabl);
+
+        this.displayMenuHeader(time);
+        out.println("Mês [" + mes + "]:");
+        out.println(tab);
+
+        new Scanner(System.in).nextLine();
+    }
+
     public void showQ5(List<String> prodsCli, String client, String time){
         this.displayMenuHeader(time);
         Navigator<String> nav = new Navigator<>(prodsCli);
