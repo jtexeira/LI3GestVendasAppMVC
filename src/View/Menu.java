@@ -2,6 +2,7 @@ package View;
 import Utils.StringBetter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.System.out;
 import static java.lang.System.setIn;
@@ -147,7 +148,7 @@ public class Menu{
     public void showQ6(List<List<String>> prodsM, String time){
         List<String> colLabl = new ArrayList<>();
         colLabl.add("Produto");
-        colLabl.add("Clientes que compraram");
+        colLabl.add("Vendas");
 
         this.displayMenuHeader(time);
         out.println(this.defaultTable(colLabl, prodsM));
@@ -156,7 +157,7 @@ public class Menu{
     }
 
     public void showQ7(List<String> clis, String time){
-        this.displayMenuHeader("Tempo demorado: " + time);
+        this.displayMenuHeader(time);
         out.println();
         out.println("3 melhores clientes:");
         out.println();
@@ -165,7 +166,19 @@ public class Menu{
         }
 
         new Scanner(System.in).nextLine();
+    }
 
+    public void showQ8(List<String> clis, String time){
+        this.displayMenuHeader(time);
+        List<String> colLabl = new ArrayList<>();
+        colLabl.add("Clientes mais diversificados");
+        out.println(defaultTable(
+                colLabl,
+                clis
+                        .stream()
+                        .map(e -> {List<String> a = new ArrayList<>();a.add(e);return a;})
+                        .collect(Collectors.toList())));
+        new Scanner(System.in).nextLine();
     }
 
     private <T> Table defaultTable(List <String> colLabl, List<List <T>> vals){

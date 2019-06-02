@@ -121,8 +121,17 @@ public class Controller {
                     break;
 
                 case Q8:
-                    this.crono.start();
-                    this.crono.stop();
+                    try {
+                        int nCliSearch = this.menu.getInputInteiro(error, "Número de Clientes a pesquisar:");
+                        this.crono.start();
+                        List<String> clisDiverse = this.model.clientesComMaisDiversidade(nCliSearch);
+                        this.crono.stop();
+                        this.menu.showQ8(clisDiverse, this.crono.toString());
+
+                        this.menu.back();
+                        error = "";
+                    }
+                    catch (InputMismatchException e){ error = "Invalid Input"; }
                     break;
 
                 case Q9:
