@@ -1,5 +1,7 @@
 package Model;
 
+import Exceptions.InvalidFilialException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +39,18 @@ public class Faturacao {
         return this;
     }
 
-    double totalFaturado() {
-        return this
-                .faturacao
-                .values()
+    Map<Integer, Double> totalFaturado() {
+        return this.faturacao.values()
                 .stream()
-                .mapToDouble(IFatura::getTotal)
-                .sum();
+                .flatMap(e -> e.getTotalMensal().entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Double::sum));
+    }
+
+    Map<Integer, Double> totalFaturadoFilial(int filial) {
+        return this.faturacao.values()
+                .stream()
+                .flatMap(e -> e.getTotalFilial(filial).entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Double::sum));
     }
 
     public int produtosComprados() {
