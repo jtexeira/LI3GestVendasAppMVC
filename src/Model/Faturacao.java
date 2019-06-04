@@ -39,6 +39,12 @@ public class Faturacao {
         return this;
     }
 
+    double faturacaoTotal() {
+        return this.faturacao.values().stream()
+                .mapToDouble(IVenda::totalSale)
+                .sum();
+    }
+
     Map<Integer, Double> totalFaturado() {
         return this.faturacao.values()
                 .stream()

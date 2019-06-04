@@ -13,6 +13,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class GestVendasModel {
+    private String vendasFile;
+    private int vendasLidas;
+    private String productFile;
+    private String clientFile;
     private ICatCli catCli;
     private ICatProds catProds;
     private List<IVenda> vendas;
@@ -22,17 +26,21 @@ public class GestVendasModel {
 
     public GestVendasModel(String clients, String products, String sales) throws IOException{
         this.catCli = new CatCli(clients);
+        this.clientFile = clients;
         this.catProds = new CatProds(products);
+        this.productFile = products;
         this.constantes = new Constantes();
+        this.vendasLidas = 0;
         this.vendas = Files
                 .readAllLines(Paths.get(sales), StandardCharsets.UTF_8)
                 .stream()
-                .map(Venda::new)
+                .map(e ->{this.vendasLidas++; return new Venda(e);})
                 .filter(e -> e.validSale()
                         && catProds.exists(e.getCodProd())
                         && catCli.exists(e.getCodCli()))
                 .collect(Collectors
                         .toList());
+        this.vendasFile = sales;
         faturacao = new Faturacao(catProds);
         this.filiais = new Filial[constantes.numeroFiliais()];
         for (int i = 0; i < constantes.numeroFiliais(); i++) {
@@ -47,6 +55,43 @@ public class GestVendasModel {
                 .stream()
                 .filter(e -> e.totalSale() == 0)
                 .count();
+    }
+
+    public int vendasInvalidas() {
+        return this.vendas.size() - this.vendasLidas;
+    }
+
+    public String getVendasFile() {
+        return this.vendasFile;
+    }
+
+    public String getProductFile() {
+        return this.productFile;
+    }
+
+    public String getClientFile() {
+        return this.clientFile;
+    }
+
+    public int getTotalProdutos() {
+        return this.catProds.howMany();
+    }
+
+    public Map.Entry<Integer, Integer> getProdutosComprados() {
+        int a = this.faturacao.produtosComprados();
+        return new AbstractMap.SimpleEntry<>(a, this.catProds.howMany() - a);
+    }
+
+    public Map.Entry<Integer, Integer> getClientesCompradores() {
+        int a = (int) this.vendas.stream()
+                .map(IVenda::getCodCli)
+                .distinct()
+                .count();
+        return new AbstractMap.SimpleEntry<>(a, this.catCli.howMany() - a);
+    }
+
+    public double totalFaturado() {
+        return this.faturacao.faturacaoTotal();
     }
 
     //1.2
