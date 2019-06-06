@@ -1,29 +1,6 @@
 package Model;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-/**
- * Representa toda a faturação do sistema
- */
-public class Faturacao implements IFaturacao{
-    private Map<String, IFatura> faturacao;
-
-    /**
-     * Construtor da Faturação
-     * @param p Catálogo de Produtos ao qual a informação da faturação se vai referir
-     */
-    Faturacao(ICatProds p) {
-        this.faturacao = p
-                .productList()
-                .stream()
-                .map(IProduct::getId)
-                .collect(Collectors
-                        .toMap(Function.identity(), Fatura::new));
-    }
-
+public interface IFaturacao {
     /**
      * Atualiza uma fatura com informação de uma venda
      * @param v Venda com a informação
