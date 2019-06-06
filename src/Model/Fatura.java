@@ -12,7 +12,7 @@ public class Fatura implements IFatura {
      * Construtor de uma fatura
      * @param id ID do produto referente
      */
-   Fatura(String id) {
+    Fatura(String id) {
         this.prodId = id;
         this.nVendas = new int[3][12];
         this.total = new double[3][12];
@@ -83,6 +83,7 @@ public class Fatura implements IFatura {
         }
         return a;
     }
+
     /**
      * Getter do ID do produto ao que a fatura se refere
      * @return ID do produto

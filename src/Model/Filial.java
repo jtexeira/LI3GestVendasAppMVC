@@ -101,6 +101,14 @@ class Filial {
         return null;
     }
 
+    /**
+     * Determina a lista de produtos que um cliente comprou, quantas vezes
+     * fizeram compras e quanto foi faturado no total num mes
+     * @param clientID Cliente a procurar
+     * @param mes Mes a pesquisar
+     * @return Lista de produtos que foram comprados pelo cliente, quantas compras
+     * fizeram e quanto foi faturado no mes
+     */
     Map.Entry<Set<String>, Map.Entry<Integer, Double>> statsCliente(String clientID, int mes) {
         List<IVenda> a = this.infoClients.get(clientID).stream().filter(e -> e.getMonth() == mes).collect(Collectors.toList());
         return getSetEntryEntry(a);
@@ -110,7 +118,8 @@ class Filial {
         List<Double> z = a.stream()
                 .map(IVenda::totalSale)
                 .collect(Collectors.toList());
-        Map.Entry<Integer, Double> o = new AbstractMap.SimpleEntry<>(z.size(), z.stream().reduce(0.0, Double::sum));
+        Map.Entry<Integer, Double> o = new AbstractMap.SimpleEntry<>(z.size(), z.stream()
+                .reduce(0.0, Double::sum));
         return new AbstractMap.SimpleEntry<>(
                 a.stream()
                         .map(IVenda::getCodProd)
@@ -118,19 +127,32 @@ class Filial {
                 o);
     }
 
+    /**
+     * Determina a lista de clientes que comprou um dado produto, quantas vezes
+     * foi comprado e quanto foi faturado no total num mes
+     * @param productID Produto a procurar
+     * @param mes Mes a pesquisar
+     * @return Lista de clientes que comprou o produto, quantas vezes foi comprado
+     * e quanto foi faturado no mes
+     */
     Map.Entry<Set<String>, Map.Entry<Integer, Double>> statsProduto(String productID, int mes) {
         List<IVenda> a = this.infoProds.get(productID).stream().filter(e -> e.getMonth() == mes).collect(Collectors.toList());
         return getSetEntryEntry(a);
     }
 
+    /**
+     * Calcula o total faturado por produto por mes
+     * @param mes Mes em questao
+     * @return Faturacao total do mes por produto
+     */
     Map<String, Double> faturacaoR(int mes) {
         return this.infoProds.entrySet()
                 .stream()
                 .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue()
                         .stream()
-                .filter(a -> a.getMonth() == mes)
-                .mapToDouble(IVenda::totalSale)
-                .sum()))
+                        .filter(a -> a.getMonth() == mes)
+                        .mapToDouble(IVenda::totalSale)
+                        .sum()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

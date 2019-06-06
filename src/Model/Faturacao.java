@@ -29,7 +29,7 @@ public class Faturacao implements IFaturacao{
      * @param v Venda com a informação
      * @return Faturação atualizada
      */
-    Faturacao update(IVenda v) {
+    public Faturacao update(IVenda v) {
         this.faturacao.get(v.getCodProd()).update(v);
         return this;
     }
@@ -38,7 +38,7 @@ public class Faturacao implements IFaturacao{
      * Calcula o total faturado
      * @return Faturação Total
      */
-    double faturacaoTotal() {
+    public double faturacaoTotal() {
         return this.faturacao.values().stream()
                 .mapToDouble(IFatura::getTotal)
                 .sum();
@@ -48,7 +48,7 @@ public class Faturacao implements IFaturacao{
      * Calcula o total faturado por mês
      * @return Faturação mensal
      */
-    Map<Integer, Double> totalFaturado() {
+    public Map<Integer, Double> totalFaturado() {
         return this.faturacao.values()
                 .stream()
                 .flatMap(e -> e.getTotalMensal().entrySet().stream())
@@ -60,7 +60,7 @@ public class Faturacao implements IFaturacao{
      * @param filial Filial que é desejada a faturação
      * @return Faturação mensal da filial
      */
-    Map<Integer, Double> totalFaturadoFilial(int filial) {
+    public Map<Integer, Double> totalFaturadoFilial(int filial) {
         return this.faturacao.values()
                 .stream()
                 .flatMap(e -> e.getTotalFilial(filial).entrySet().stream())
@@ -83,7 +83,7 @@ public class Faturacao implements IFaturacao{
      * Calcula a lista ordenada de produtos que não foram comprados
      * @return Lista com IDs dos produtos não comprados
      */
-    List<String> listaProdutosNaoComprados() {
+    public List<String> listaProdutosNaoComprados() {
         return this.faturacao
                 .values()
                 .stream()
