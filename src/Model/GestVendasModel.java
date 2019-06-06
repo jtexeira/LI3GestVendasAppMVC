@@ -2,14 +2,14 @@ package Model;
 
 import Exceptions.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.nio.file.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class GestVendasModel {
+public class GestVendasModel implements Serializable{
     private String vendasFile;
     private int vendasLidas;
     private String productFile;
@@ -18,7 +18,7 @@ public class GestVendasModel {
     private ICatProds catProds;
     private List<IVenda> vendas;
     private IFaturacao faturacao;
-    private Filial[] filiais;
+    private IFilial[] filiais;
     private Constantes constantes;
 
     /**
@@ -26,7 +26,7 @@ public class GestVendasModel {
      * @param clients Caminho do ficheiro de clientes
      * @param products Caminho do ficheiro de produtos
      * @param sales Caminho do ficheiro de vendas
-     * @throws IOException
+     * @throws IOException Exceção se ocorrer erros a ler os ficheiros
      */
     public GestVendasModel(String clients, String products, String sales) throws IOException{
         this.catCli = new CatCli(clients);
@@ -158,7 +158,7 @@ public class GestVendasModel {
      * Calcula o total faturado por mes numa filial
      * @param filial Filial da qual pretendemos a faturacao
      * @return Faturacao por mes da filial
-     * @throws InvalidFilialException
+     * @throws InvalidFilialException Exceção se a filial for inválida
      */
     public Map<Integer, Double> faturacaoPorFilial(int filial) throws InvalidFilialException {
         if(!constantes.filialValida(filial))
@@ -170,7 +170,7 @@ public class GestVendasModel {
      * Calcula o numero de clientes que fizeram compras numa filial por mes
      * @param filial Filial da qual se deseja a informacao
      * @return Numero de clientes que compraram na filial mes a mes
-     * @throws InvalidFilialException
+     * @throws InvalidFilialException Exceção se a filial for inválida
      */
     public Map<Integer, Integer> clientesPorFilial(int filial) throws InvalidFilialException {
         if(!this.constantes.filialValida(filial))
@@ -202,7 +202,7 @@ public class GestVendasModel {
      * mes
      * @param mes Mes referente as vendas
      * @return Total de vendas efetuadas e numero de clientes distintos que fizeram compras
-     * @throws MesInvalidoException
+     * @throws MesInvalidoException Exceção se o mês for inválido
      */
     public Map.Entry<Integer, Integer> clientesVendasTotais(int mes) throws MesInvalidoException {
         if(!constantes.mesValido(mes))
@@ -221,8 +221,8 @@ public class GestVendasModel {
      * @param filial Filial onde foram feitas as compras
      * @param mes Mes referente as vendas
      * @return Total de vendas efetuadas e numero de clientes distintos que fizeram compras
-     * @throws InvalidFilialException
-     * @throws MesInvalidoException
+     * @throws InvalidFilialException Exceção se a filial for inválida
+     * @throws MesInvalidoException Exceção se o mês for inválido
      */
     public Map.Entry<Integer, Integer> clientesVendasTotais(int filial, int mes) throws InvalidFilialException, MesInvalidoException {
         if(!constantes.filialValida(filial))
@@ -239,18 +239,18 @@ public class GestVendasModel {
      * @param clientID ID do cliente a procurar
      * @param mes Mes onde foram efetuadas as compras
      * @return Numero total de produtos distintos, quantas compras e quanto foi gasto pelo cliente num mes
-     * @throws MesInvalidoException
-     * @throws IvalidClientException
+     * @throws MesInvalidoException Exceção se o mês for inválido
+     * @throws InvalidClientException Exceção se o cliente for inválido
      */
-    public Map.Entry<Integer, Map.Entry<Integer,Double>> statsClientes(String clientID, int mes) throws MesInvalidoException, IvalidClientException {
+    public Map.Entry<Integer, Map.Entry<Integer,Double>> statsClientes(String clientID, int mes) throws MesInvalidoException, InvalidClientException {
         if(!constantes.mesValido(mes))
             throw new MesInvalidoException();
         if(!this.catCli.exists(clientID))
-            throw new IvalidClientException();
+            throw new InvalidClientException();
         Set<String> ree = new HashSet<>();
         int vezes = 0;
         double total = 0;
-        for(Filial a : this.filiais) {
+        for(IFilial a : this.filiais) {
             Map.Entry<Set<String>, Map.Entry<Integer,Double>> o = a.statsCliente(clientID, mes);
             ree.addAll(o.getKey());
             vezes += o.getValue().getKey();
@@ -266,8 +266,8 @@ public class GestVendasModel {
      * @param productID ID do produto a procurar
      * @param mes Mes onde foram efetuadas as compras
      * @return Numero total de clientes distintos que compraram o produto, quantas vezes foi comprado e quanto foi gasto
-     * @throws MesInvalidoException
-     * @throws InvalidProductExecption
+     * @throws MesInvalidoException Exceção se o mês for invalido
+     * @throws InvalidProductExecption Exceção se o produto for inválido
      */
     public Map.Entry<Integer, Map.Entry<Integer,Double>> statsProdutos(String productID, int mes) throws MesInvalidoException, InvalidProductExecption {
         if(!constantes.mesValido(mes))
@@ -277,7 +277,7 @@ public class GestVendasModel {
         Set<String> ree = new HashSet<>();
         int vezes = 0;
         double total = 0;
-        for(Filial a : this.filiais) {
+        for(IFilial a : this.filiais) {
             Map.Entry<Set<String>, Map.Entry<Integer,Double>> o = a.statsProduto(productID, mes);
             ree.addAll(o.getKey());
             vezes += o.getValue().getKey();
@@ -292,13 +292,13 @@ public class GestVendasModel {
      * comprou
      * @param clientID Cliente do qual pretendemos a lista
      * @return Lista de produtos comprados por um cliente
-     * @throws IvalidClientException
+     * @throws InvalidClientException Exceção se o Cliente não existir
      */
-    public List<Map.Entry<String, Integer>> produtosPorCliente(String clientID) throws IvalidClientException {
+    public List<Map.Entry<String, Integer>> produtosPorCliente(String clientID) throws InvalidClientException {
         if(!this.catCli.exists(clientID))
-            throw new IvalidClientException();
+            throw new InvalidClientException();
         List<Map<String, Integer>> b = new ArrayList<>();
-        for(Filial a : this.filiais) {
+        for(IFilial a : this.filiais) {
             b.add(a.produtosCompradosPorCliente(clientID));
         }
         return b.stream()
@@ -326,7 +326,7 @@ public class GestVendasModel {
      */
     public List<Map.Entry<String, Integer>> produtosMaisVendidos(int limite) {
         List<Map<String, Map.Entry<Integer,Integer>>> a = new ArrayList<>();
-        for(Filial x : this.filiais) {
+        for(IFilial x : this.filiais) {
             a.add(x.produtosMaisVendidos());
         }
         return a.stream()
@@ -348,7 +348,7 @@ public class GestVendasModel {
      * Determina o top de clientes da filial
      * @param filial Filial em questao
      * @return Lista com IDs do top de clientes
-     * @throws InvalidFilialException
+     * @throws InvalidFilialException Exceção se a filial for inválida
      */
     public List<String> melhoresClientesPorFilial(int filial) throws InvalidFilialException {
         if(!this.constantes.filialValida(filial))
@@ -366,7 +366,7 @@ public class GestVendasModel {
      */
     public List<String> clientesComMaisDiversidade(int limite) {
         List<Map<String, Set<String>>> a = new ArrayList<>();
-        for(Filial x : this.filiais) {
+        for(IFilial x : this.filiais) {
             a.add(x.maisDiversidadeDeProdutos());
         }
         return a.stream()
@@ -392,7 +392,7 @@ public class GestVendasModel {
      * @param prodID Codigo do Produto em questao
      * @param limite Numero de clientes desejado
      * @return Lista ordenada dos clientes que mais compraram o produto
-     * @throws InvalidProductExecption
+     * @throws InvalidProductExecption Exceção se o Produto não existir
      */
     public List<Map.Entry<String,Double>> clientesQueMaisCompraram(String prodID, int limite) throws InvalidProductExecption {
         if(!this.catProds.exists(prodID))
@@ -421,8 +421,8 @@ public class GestVendasModel {
      * @param mes Mes da faturacao
      * @param filial Filial referente
      * @return Lista de produtos comprados na filial e respetiva faturacao
-     * @throws InvalidFilialException
-     * @throws MesInvalidoException
+     * @throws InvalidFilialException Exceção se a filial não existir
+     * @throws MesInvalidoException Exceção se o mês for inválido
      */
     public Map<String, Double> faturacaoProd(int mes, int filial) throws InvalidFilialException, MesInvalidoException {
         if(!constantes.filialValida(filial))
@@ -430,5 +430,31 @@ public class GestVendasModel {
         if(!constantes.mesValido(mes))
             throw new MesInvalidoException();
         return this.filiais[filial-1].faturacaoR(mes);
+    }
+
+    /**
+     * Guarda o estado atual do Model para um dado ficheiro
+     * @param fName Caminho do ficheiro a guardar
+     * @throws IOException Exceção de erro a escrever para o ficheiro
+     */
+    public void save(String fName) throws IOException {
+        FileOutputStream a = new FileOutputStream(fName);
+        ObjectOutputStream r = new ObjectOutputStream(a);
+        r.writeObject(this);
+        r.flush();
+        r.close();
+    }
+
+    /**
+     * Carrega o Model de um ficheiro de ObjectStream
+     * @param fName Caminho do ficheiro a carregar
+     * @return Modelo lido
+     */
+    public static GestVendasModel read(String fName) throws IOException, ClassNotFoundException {
+        FileInputStream r = new FileInputStream(fName);
+        ObjectInputStream a = new ObjectInputStream(r);
+        GestVendasModel u = (GestVendasModel) a.readObject();
+        a.close();
+        return u;
     }
 }
