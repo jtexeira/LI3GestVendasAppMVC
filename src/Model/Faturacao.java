@@ -41,7 +41,7 @@ public class Faturacao {
 
     double faturacaoTotal() {
         return this.faturacao.values().stream()
-                .mapToDouble(IVenda::totalSale)
+                .mapToDouble(IFatura::getTotal)
                 .sum();
     }
 
