@@ -3,7 +3,7 @@ package Utils;
 public interface IStringBetter {
     String getStr();
 
-    StringBetter repeate(int n);
+    StringBetter repeat(int n);
 
     StringBetter append(String strA);
 

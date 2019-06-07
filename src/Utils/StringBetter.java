@@ -10,12 +10,7 @@ public class StringBetter implements IStringBetter{
 
     public String getStr() { return str; }
 
-    private StringBetter setStr(String str) {
-        this.str = str;
-        return this;
-    }
-
-    public StringBetter repeate(int n){
+    public StringBetter repeat(int n){
         StringBuilder s = new StringBuilder();
         for(int i = 0; i < n; i++)
             s.append(this.str);

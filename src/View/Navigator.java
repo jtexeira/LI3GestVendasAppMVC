@@ -73,17 +73,17 @@ public class Navigator<T> implements INavigator{
             for(int j = 0; j < this.nCols && j + i * this.nCols < this.strings.size(); j++){
                 pos = j + i * this.nCols;
                 builder.append(pos + 1).append(".");
-                builder.append(spac.repeate(
+                builder.append(spac.repeat(
                         String.valueOf(this.strings.size()).length() - String.valueOf(pos + 1).length() + 1
                         ).toString());
-                builder.append(this.strings.get(pos)).append(spac.repeate(this.separator));
-                builder.append(spac.repeate(this.maxPrint - this.strings.get(pos).toString().length()));
+                builder.append(this.strings.get(pos)).append(spac.repeat(this.separator));
+                builder.append(spac.repeat(this.maxPrint - this.strings.get(pos).toString().length()));
 
             }
             r++;
             builder.append("\n");
         }
-        builder.append(senter.repeate(this.pageSize - r  + 2));
+        builder.append(senter.repeat(this.pageSize - r  + 2));
         builder.append("\t\t").append(this.page + 1).append("/").append(this.nPages+1);
         return builder.toString();
     }
