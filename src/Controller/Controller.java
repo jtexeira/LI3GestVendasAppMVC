@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 import static java.lang.System.out;
 
 public class Controller {
-    private Menu menu;
-    private GestVendasModel model;
-    private Crono cronoLoad;
-    private Crono crono;
-    private Constantes constantes;
+    private final Menu menu;
+    private final GestVendasModel model;
+    private final Crono cronoLoad;
+    private final Crono crono;
+    private final Constantes constantes;
 
     public Controller(Menu view, GestVendasModel model, Crono crono) {
         this.menu = view;
@@ -185,9 +185,9 @@ public class Controller {
                 case Q9:
                     try{
                         String prodBougth = this.menu.getInputString(error, "Produto a pesquisar:");
-                        int nProdBrougth = this.menu.getInputInt(error, "Número de clientes a pesquisar:");
+                        int nProdBougth = this.menu.getInputInt(error, "Número de clientes a pesquisar:");
                         this.crono.start();
-                        List<Map.Entry<String,Double>> highestBuyer = this.model.clientesQueMaisCompraram(prodBougth, nProdBrougth);
+                        List<Map.Entry<String,Double>> highestBuyer = this.model.clientesQueMaisCompraram(prodBougth, nProdBougth);
                         this.crono.stop();
                         this.menu.showQ9(
                                 highestBuyer
@@ -197,7 +197,7 @@ public class Controller {
                                             a.add(e.getKey());
                                             a.add(String.format("%.2f", e.getValue()));
                                             return a;})
-                                        .limit(nProdBrougth)
+                                        .limit(nProdBougth)
                                         .collect(Collectors.toList()),
                                 this.crono.toString());
                         this.menu.back();
@@ -274,7 +274,7 @@ public class Controller {
                         try {
                             fatPerFilial.add(this.model.faturacaoPorFilial(filial));
                             cliFilMes.add(this.model.clientesPorFilial(filial));
-                        } catch (InvalidFilialException e) {}
+                        } catch (InvalidFilialException ignored) {}
                     this.crono.stop();
 
                     List<List<String>> monthly = new ArrayList<>();
