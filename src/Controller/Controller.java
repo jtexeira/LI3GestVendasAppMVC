@@ -38,7 +38,7 @@ public class Controller {
                     List <String> prodsNComprados = this.model.listaDeProdutosNaoComprados();
                     this.crono.stop();
                     this.menu.showQ1(prodsNComprados, this.crono.toString());
-                    this.menu.back();
+                    
                     error = "";
                     break;
 
@@ -69,7 +69,9 @@ public class Controller {
                 case Q3:
                     try {
                         String cliSStats = this.menu.getInputString(error, "Cliente a pesquisar:");
-                        int mesSStats = this.menu.getInputInt(error, "Mês a pesquisar:");
+                        int mesSStats = this.menu.getInputInt(
+                                error,
+                                "Mês a pesquisar [1-" + this.constantes.meses() + "]:");
                         this.crono.start();
                         Map.Entry<Integer, Map.Entry<Integer, Double>> cliStats = this.model.statsClientes(cliSStats, mesSStats);
                         this.crono.stop();
@@ -85,9 +87,11 @@ public class Controller {
                     break;
 
                 case Q4:
-                    try {
+                    try  {
                         String prodSStats = this.menu.getInputString(error, "Produto a pesquisar:");
-                        int mesSStats = this.menu.getInputInt(error, "Mês a pesquisar:");
+                        int mesSStats = this.menu.getInputInt(
+                                error,
+                                "Mês a pesquisar [1-" + this.constantes.meses() + "]:");
                         this.crono.start();
                         Map.Entry<Integer, Map.Entry<Integer, Double>> prodStats = this.model.statsProdutos(prodSStats, mesSStats);
                         this.crono.stop();
@@ -116,7 +120,7 @@ public class Controller {
                                         .collect(Collectors.toList()),
                                 clientProd,
                                 this.crono.toString());
-                        this.menu.back();
+
                         error = "";
                     }
                     catch (InvalidClientException e) { error = "Invalid Client"; }
@@ -220,7 +224,6 @@ public class Controller {
 
                         this.menu.showQ10(fatTotal, mes, filial, this.crono.toString());
 
-                        this.menu.back();
                         error = "";
 
                     }
