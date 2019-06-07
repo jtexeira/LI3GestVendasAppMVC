@@ -12,9 +12,9 @@ public class Navigator<T> implements INavigator{
     private int nCols;
     private int nPages;
     private int page;
-    private int separator;
+    private final int separator;
     private int maxPrint;
-    private Terminal term;
+    private final Terminal term;
 
     public Navigator(List<T> strings) {
         this.builder = new StringBuilder();

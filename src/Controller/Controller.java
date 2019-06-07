@@ -155,6 +155,7 @@ public class Controller {
                         List <String> clis = this.model.melhoresClientesPorFilial(filN);
                         this.crono.stop();
                         this.menu.showQ7(clis, this.crono.toString());
+
                         this.menu.back();
                         error = "";
                     }
@@ -241,6 +242,7 @@ public class Controller {
                     this.crono.stop();
 
                     List<String> q11 = new ArrayList<>();
+                    q11.add(this.cronoLoad.toString());
                     q11.add(fileVendas);
                     q11.add(fileProdutos);
                     q11.add(fileCli);
@@ -268,22 +270,12 @@ public class Controller {
                     this.crono.start();
                     Map<Integer, Integer> monthSales = this.model.vendasMensais();
                     List<Map<Integer, Double>> fatPerFilial = new ArrayList<>();
+                    List<Map<Integer, Integer>> cliFilMes = new ArrayList<>();
                     for(int filial = 1; filial <= this.constantes.numeroFiliais(); filial++)
                         try {
                             fatPerFilial.add(this.model.faturacaoPorFilial(filial));
+                            cliFilMes.add(this.model.clientesPorFilial(filial));
                         } catch (InvalidFilialException e) {}
-
-                    List<List<Integer>> cliFilMes = new ArrayList<>();
-                    for(int filial = 1; filial <= this.constantes.numeroFiliais(); filial++) {
-                        List<Integer> tmp = new ArrayList<>();
-                        for (int mes = 1; mes <= this.constantes.meses(); mes++) {
-                            try {
-                                tmp.add(this.model.clientesPorFilial(filial, mes));
-                            }
-                            catch (InvalidFilialException | MesInvalidoException e) {}
-                        }
-                        cliFilMes.add(tmp);
-                    }
                     this.crono.stop();
 
                     List<List<String>> monthly = new ArrayList<>();
@@ -310,7 +302,6 @@ public class Controller {
                     this.menu.showQ12(this.crono.toString(), monthly, this.constantes.meses(), this.constantes.numeroFiliais());
 
                     this.menu.back();
-
                     break;
 
                     default:
