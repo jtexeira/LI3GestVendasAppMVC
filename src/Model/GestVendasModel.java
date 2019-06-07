@@ -70,7 +70,7 @@ public class GestVendasModel implements Serializable{
      * @return Numero de vendas invalidas
      */
     public int vendasInvalidas() {
-        return this.vendas.size() - this.vendasLidas;
+        return -this.vendas.size() + this.vendasLidas;
     }
 
     /**
@@ -310,7 +310,7 @@ public class GestVendasModel implements Serializable{
                 .sorted((o1, o2) -> {
                     int a = Integer.compare(o2.getValue(), o1.getValue());
                     if(a == 0)
-                        a = o2.getKey().compareTo(o1.getKey());
+                        a = o1.getKey().compareTo(o2.getKey());
                     return a;
                 })
                 .collect(Collectors.toList());
@@ -329,8 +329,8 @@ public class GestVendasModel implements Serializable{
         for(IFilial x : this.filiais) {
             a.add(x.produtosMaisVendidos());
         }
-        return a.stream()
-                .flatMap(e -> e.entrySet().stream())
+        return Arrays.stream(this.filiais)
+                .flatMap(e -> e.produtosMaisVendidos().entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         Map.Entry::getValue,
                         (e1, e2) -> new AbstractMap.SimpleEntry<>(e1.getKey(), e1.getValue() + e2.getValue())))
@@ -338,7 +338,6 @@ public class GestVendasModel implements Serializable{
                 .stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue(Map.Entry.comparingByKey())))
                 .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue().getValue()))
-                .limit(limite)
                 .collect(Collectors.toList());
     }
 
@@ -380,7 +379,6 @@ public class GestVendasModel implements Serializable{
                         .reverseOrder(Map.Entry
                                 .comparingByValue(Comparator.comparingInt(Set::size))))
                 .map(Map.Entry::getKey)
-                .limit(limite)
                 .collect(Collectors.toList());
     }
 
@@ -410,7 +408,6 @@ public class GestVendasModel implements Serializable{
                         a = o2.getKey().compareTo(o1.getKey());
                     return a;
                 })
-                .limit(limite)
                 .collect(Collectors.toList());
     }
 
@@ -429,7 +426,9 @@ public class GestVendasModel implements Serializable{
             throw new InvalidFilialException();
         if(!constantes.mesValido(mes))
             throw new MesInvalidoException();
-        return this.filiais[filial-1].faturacaoR(mes);
+        return this.vendas.stream()
+                .filter(e -> e.getFilial() == filial && e.getMonth() == mes)
+                .collect(Collectors.toMap(IVenda::getCodProd, IVenda::totalSale, Double::sum));
     }
 
     /**
