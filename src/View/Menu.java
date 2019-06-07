@@ -20,13 +20,9 @@ public class Menu implements IMenu{
         this.correctMenu();
     }
 
-    public boolean getRun() {
-        return this.run;
-    }
+    public boolean getRun() { return this.run; }
 
-    public MenuInd getMenu() {
-        return this.menu;
-    }
+    public MenuInd getMenu() { return this.menu; }
 
     public int getInputInt(String error, String text){
         Scanner scanner = new Scanner(System.in);
