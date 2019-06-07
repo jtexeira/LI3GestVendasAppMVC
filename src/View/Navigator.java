@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public class Navigator<T> implements INavigator{
-    private List<T> strings;
+    private final List<T> strings;
     private final StringBuilder builder;
     private int pageSize;
     private int nCols;

@@ -8,7 +8,7 @@ import static java.lang.System.out;
 
 public class Menu implements IMenu{
     private MenuInd menu;
-    private Stack<MenuInd> prev;
+    private final Stack<MenuInd> prev;
     private List<MenuInd> options;
     private boolean run;
 
@@ -322,7 +322,7 @@ public class Menu implements IMenu{
             case Q6:
                 return "N produtos mais vendidos";
             case Q7:
-                return  "Três maiores compradores";
+                return "Três maiores compradores";
             case Q8:
                 return "N clientes que compraram mais produtos diferentes";
             case Q9:
@@ -332,7 +332,7 @@ public class Menu implements IMenu{
             case Q1_1:
                 return "Stats de ficheiros lidos";
             case Q1_2:
-                return  "Stats globais";
+                return "Stats globais";
                 default:
                     return "";
         }
