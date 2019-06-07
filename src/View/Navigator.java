@@ -5,6 +5,7 @@ import Utils.Terminal;
 
 import java.util.List;
 
+
 public class Navigator<T> implements INavigator{
     private List<T> strings;
     private final StringBuilder builder;
@@ -42,6 +43,8 @@ public class Navigator<T> implements INavigator{
         this.pageSize = this.term.getLines() - 10;
         if (this.pageSize < 1)
             this.pageSize = 1;
+        if (this.pageSize > 20)
+            this.pageSize = 20;
         this.nCols = 1;
         while (true) {
             if (((this.nCols + 1) * (String.valueOf(strings.size() + 1).length() + 2 + this.maxPrint + this.separator) < this.term.getColumns()))

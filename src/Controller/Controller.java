@@ -256,8 +256,7 @@ public class Controller {
                     q11.add(cliCompraram.getValue().toString());
 
                     this.menu.showQ11(
-                            q11
-                                    .stream()
+                            q11.stream()
                                     .map(Arrays::asList)
                                     .collect(Collectors.toList()),
                             this.crono.toString());
