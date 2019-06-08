@@ -11,6 +11,12 @@ public class Table<T> implements ITable{
     private final List<List<T>> iT;
     private final StringBuilder builder;
 
+    /**
+     * Construtor da classe
+     * @param iT Matriz de elementos a representar
+     * @param linLabel Lista de etiquetas das linhas
+     * @param colLabel Lista de etiquetas das colunas
+     */
     public Table(List<List<T>> iT, List<String> linLabel, List<String> colLabel) {
         this.linLabl = linLabel;
         this.colLabl = colLabel;

@@ -6,6 +6,9 @@ public class Crono implements ICrono{
   private long inicio;
   private long fim;
 
+    /**
+     * construtor da classe crono
+     */
   public Crono() {
       this.inicio = 0;
       this.fim = 0;

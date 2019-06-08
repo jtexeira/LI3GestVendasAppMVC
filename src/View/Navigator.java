@@ -18,6 +18,10 @@ public class Navigator<T> implements INavigator{
     private int maxPrint;
     private final Terminal term;
 
+    /**
+     * Construtor para a classe
+     * @param strings Lista de valores a respresentar
+     */
     public Navigator(List<T> strings) {
         this.builder = new StringBuilder();
         this.strings = strings;

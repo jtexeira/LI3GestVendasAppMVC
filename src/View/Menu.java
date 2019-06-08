@@ -13,6 +13,9 @@ public class Menu implements IMenu{
     private List<MenuInd> options;
     private boolean run;
 
+    /**
+     * Construtor da classe menu
+     */
     public Menu() {
         this.menu = MenuInd.Initial;
         this.prev = new Stack<>();
