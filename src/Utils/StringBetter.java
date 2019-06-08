@@ -10,7 +10,7 @@ public class StringBetter implements IStringBetter{
 
     /**
      * Construtor da classe StringBetter
-     * @param str
+     * @param str conteudo da instância
      */
     public StringBetter(String str) { this.str = str; }
 

@@ -17,17 +17,25 @@ import java.util.stream.Collectors;
 
 import static java.lang.System.out;
 
-public class Controller {
+public class Controller implements IController{
     private final IMenu menu;
     private IGestVendasModel model;
     private final ICrono crono;
 
+    /**
+     * Construtor para a classe Controller
+     * @param view instancia da View
+     * @param model instancia do Model
+     */
     public Controller(Menu view, GestVendasModel model) {
         this.menu = view;
         this.model = model;
         this.crono = new Crono();
     }
 
+    /**
+     * Método para começar o Controller
+     */
     public void start(){
         String error = "";
         while(this.menu.getRun()) {
