@@ -338,7 +338,7 @@ public class Controller implements IController{
                         this.menu.back();
                         error = "";
                     }
-                    catch (IOException e) {error = "Ficheiro Inválido";e.printStackTrace();}
+                    catch (IOException e) {error = "Ficheiro Inválido";}
                     break;
                 case Load:
                     try {
