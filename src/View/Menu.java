@@ -23,15 +23,32 @@ public class Menu implements IMenu{
 
     public boolean getRun() { return this.run; }
 
+    /**
+     * Método para obtert o menu em que se está no momento
+     * @return O MenuInd em que se está
+     */
     public MenuInd getMenu() { return this.menu; }
 
-    public int getInputInt(String error, String text){
+    /**
+     * Método para obter o input inteiro do utilizador
+     * @param error Texto de erro a mostrar
+     * @param text Texto a mostrar no pedido de input
+     * @return Devolve o inteiro lido
+     * @throws InputMismatchException Caso o valor introduzido não seja um inteiro.
+     */
+    public int getInputInt(String error, String text) throws InputMismatchException{
         Scanner scanner = new Scanner(System.in);
         this.displayMenuHeader(error);
         out.println(text);
         return scanner.nextInt();
     }
 
+    /**
+     * Método para obter uma string do utilizador
+     * @param error Texto de erro a mostrar
+     * @param text Texto a mostrar no pedido de input
+     * @return Devolve a string lida
+     */
     public String getInputString(String error, String text){
         Scanner scanner = new Scanner(System.in);
         this.displayMenuHeader(error);
@@ -39,6 +56,10 @@ public class Menu implements IMenu{
         return scanner.nextLine();
     }
 
+    /**
+     * Lê o input do utilizador e altera o menu onde se está
+     * @return this
+     */
     public Menu parser(){
         String str = new Scanner(System.in).nextLine();
         if (str.matches("^[+-]?\\d{1,8}$")) {
@@ -57,15 +78,10 @@ public class Menu implements IMenu{
         return this;
     }
 
-    private Menu selectOption(int i){
-        if (this.options.size() > i - 1) {
-            this.prev.push(this.menu);
-            this.menu = this.options.get(i - 1);
-            this.correctMenu();
-        }
-        return this;
-    }
-
+    /**
+     * Recua no menu
+     * @return this
+     */
     public Menu back(){
         if (this.prev.size() > 0) {
             this.menu = this.prev.pop();
@@ -77,11 +93,23 @@ public class Menu implements IMenu{
         return this;
     }
 
+    /**
+     * Método para mostrar a Querie 1
+     * @param notBought Lista de todos os produtos não comprados
+     * @param time tempo que demorou a querie
+     */
     public void showQ1(List<String> notBought, String time){
         INavigator nav = new Navigator<>(notBought);
         this.menuNavigator(nav, time,"Produtos não comprados");
     }
 
+    /**
+     * Método para mostrar a Querie 2
+     * @param sales Vendas totais e clientes totais na key e no value respetivamente
+     * @param mesSales Mes de vendas a mostrar
+     * @param filialSales filial a mostrar (0 se for todas)
+     * @param time tempo que demorou a querie
+     */
     public void showQ2(Map.Entry<Integer, Integer> sales, int mesSales, int filialSales, String time){
         this.displayMenuHeader(time);
         if(filialSales == 0){
@@ -95,32 +123,38 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
-    public void showQ3(String client, int mes, Map.Entry<Integer, Map.Entry<Integer, Double>> cliStats, String time){
-        List<String> colLabl = new ArrayList<>();
-        colLabl.add("produtos comprados");
-        colLabl.add("n compras");
-        colLabl.add("Total gasto");
-
+    /**
+     * Método para mostrar a Querie 3
+     * @param client O cliente que foi pesquisado
+     * @param nMes O número de meses calculados
+     * @param cliStats A tabela de valores a apresentar
+     * @param time tempo que demorou a querie
+     */
+    public void showQ3(String client, int nMes, List<List<String>> cliStats, String time){
         List<String> linLabl = new ArrayList<>();
-        linLabl.add(client);
+        linLabl.add("produtos comprados");
+        linLabl.add("n compras");
+        linLabl.add("Total gasto");
 
-        List<String> valLine = new ArrayList<>();
-        valLine.add(cliStats.getKey().toString());
-        valLine.add(cliStats.getValue().getKey().toString());
-        valLine.add(String.format("%.2f", cliStats.getValue().getValue()));
+        List<String> colLabl = new ArrayList<>();
+        for(int mes = 1; mes <= nMes; mes++)
+            colLabl.add("Mes [" + mes + "]");
 
-        List<List<String>> val = new ArrayList<>();
-        val.add(valLine);
-
-        ITable tab = new Table<>(val, linLabl, colLabl);
+        ITable tab = new Table<>(cliStats, linLabl, colLabl);
 
         this.displayMenuHeader(time);
-        out.println("Mês [" + mes + "]:");
         out.println(tab);
 
         new Scanner(System.in).nextLine();
     }
 
+    /**
+     * Método para mostrar a Querie 4
+     * @param produto O produto que foi pesquisado
+     * @param mes O mes que foi pesquisado
+     * @param prodStats As estatisticas do produto a apresentar
+     * @param time tempo que demorou a querie
+     */
     public void showQ4(String produto, int mes, Map.Entry<Integer, Map.Entry<Integer, Double>> prodStats, String time){
         List<String> colLabl = new ArrayList<>();
         colLabl.add("Clientes que compraram");
@@ -147,12 +181,23 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
+    /**
+     * Método para mostrar a Querie 5
+     * @param prodsCli Produtos mais comprados pelo cliente
+     * @param client Cliente que foi pesquisado
+     * @param time tempo que demorou a querie
+     */
     public void showQ5(List<String> prodsCli, String client, String time){
         this.displayMenuHeader(time);
         INavigator nav = new Navigator<>(prodsCli);
         this.menuNavigator(nav, time,"Produtos mais comprados por " + client);
     }
 
+    /**
+     * Método para mostrar a Querie 6
+     * @param prodsM Dados a apresentar na tabela
+     * @param time tempo que demorou a querie
+     */
     public void showQ6(List<List<String>> prodsM, String time){
         List<String> colLabl = new ArrayList<>();
         colLabl.add("Produto");
@@ -164,6 +209,11 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
+    /**
+     * Método para mostrar a Querie 7
+     * @param clis Lista ordenada dos melhores clientes
+     * @param time tempo que demorou a querie
+     */
     public void showQ7(List<String> clis, String time){
         this.displayMenuHeader(time);
         out.println();
@@ -176,6 +226,11 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
+    /**
+     * Método para mostrar a Querie 8
+     * @param clis Lista de clientes a apresentar
+     * @param time Tempo que demorou a querie
+     */
     public void showQ8(List<String> clis, String time){
         this.displayMenuHeader(time);
         List<String> colLabl = new ArrayList<>();
@@ -189,6 +244,11 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
+    /**
+     * Método para mostrar a Querie 9
+     * @param clis Tabela de dados a apresentar
+     * @param time tempo que demorou a querie
+     */
     public void showQ9(List<List<String>> clis, String time){
         List<String> colLabl = new ArrayList<>();
         colLabl.add("Cliente");
@@ -200,6 +260,13 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
+    /**
+     * Método para mostrar a Querie 10
+     * @param fatTotal 
+     * @param mes mes pesquisado
+     * @param filial filial pesquisada
+     * @param time tempo que demorou a querie
+     */
     public void showQ10(Map<String, Double> fatTotal, int mes, int filial, String time){
         List<String> lines = new ArrayList<>();
         for (String key : fatTotal.keySet())
@@ -209,6 +276,11 @@ public class Menu implements IMenu{
         this.menuNavigator(nav, time, "Faturação total no mês [" + mes + "] na filial [" + filial + "]:");
     }
 
+    /**
+     * Método para mostrar a Querie 1.1
+     * @param val Valores a mostrar
+     * @param time tempo que demorou a querie
+     */
     public void showQ11(List<List<String>> val, String time){
         this.displayMenuHeader(time);
         List<String> colLabl = new ArrayList<>();
@@ -235,6 +307,13 @@ public class Menu implements IMenu{
 
     }
 
+    /**
+     * Método para mostrar a Querie 1.2
+     * @param time tempo que demorou a querie
+     * @param monthly estatisticas mensais
+     * @param nMeses numero de meses
+     * @param nFiliais numero de filiais
+     */
     public void showQ12(String time, List<List<String>> monthly, int nMeses, int nFiliais){
         List<String> colLabl = new ArrayList<>();
         for(int i = 0; i < nMeses; i++)
@@ -255,6 +334,11 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
+    /**
+     * Método para mostrar o save do Object Stream
+     * @param fName Nome do ficheiro
+     * @param time tempo que demorou a querie
+     */
     public void showSave(String fName, String time){
         this.displayMenuHeader(time);
         out.println();
@@ -264,6 +348,11 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
+    /**
+     * Método para mostrar o load do Object Stream
+     * @param fName Nome do ficheiro
+     * @param time tempo que demorou a querie
+     */
     public void showLoad(String fName, String time){
         this.displayMenuHeader(time);
         out.println();
@@ -312,6 +401,15 @@ public class Menu implements IMenu{
                     return;
             }
         }
+    }
+
+    private Menu selectOption(int i){
+        if (this.options.size() > i - 1) {
+            this.prev.push(this.menu);
+            this.menu = this.options.get(i - 1);
+            this.correctMenu();
+        }
+        return this;
     }
 
     private String menuOptionText(int i) {

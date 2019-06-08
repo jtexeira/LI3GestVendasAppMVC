@@ -43,7 +43,7 @@ public interface IMenu {
 
         void showQ2(Map.Entry<Integer, Integer> sales, int mesSales, int filialSales, String time);
 
-        void showQ3(String client, int mes, Map.Entry<Integer, Map.Entry<Integer, Double>> cliStats, String time);
+    void showQ3(String client, int nMes, List<List<String>> cliStats, String time);
 
         void showQ4(String produto, int mes, Map.Entry<Integer, Map.Entry<Integer, Double>> prodStats, String time);
 
