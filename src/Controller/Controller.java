@@ -45,7 +45,8 @@ public class Controller implements IController{
                     List <String> prodsNComprados = this.model.listaDeProdutosNaoComprados();
                     this.crono.stop();
                     this.menu.showQ1(prodsNComprados, this.crono.toString());
-                    
+
+                    this.menu.back();
                     error = "";
                     break;
 
@@ -141,6 +142,7 @@ public class Controller implements IController{
                                 clientProd,
                                 this.crono.toString());
 
+                        this.menu.back();
                         error = "";
                     }
                     catch (InvalidClientException e) { error = "Invalid Client"; }
@@ -250,6 +252,7 @@ public class Controller implements IController{
                                 filial,
                                 this.crono.toString());
 
+                        this.menu.back();
                         error = "";
 
                     }
