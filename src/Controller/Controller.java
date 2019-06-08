@@ -114,7 +114,8 @@ public class Controller implements IController{
                                 error,
                                 "Mês a pesquisar [1-" + this.model.meses() + "]:");
                         this.crono.start();
-                        Map.Entry<Integer, Map.Entry<Integer, Double>> prodStats = this.model.statsProdutos(prodSStats, mesSStats);
+                        Map.Entry<Integer, Map.Entry<Integer, Double>>
+                                prodStats = this.model.statsProdutos(prodSStats, mesSStats);
                         this.crono.stop();
 
                         this.menu.showQ4(prodSStats, mesSStats, prodStats, this.crono.toString());
