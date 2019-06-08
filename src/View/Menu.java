@@ -21,6 +21,11 @@ public class Menu implements IMenu{
         this.correctMenu();
     }
 
+
+    /**
+     * Get if menu is running
+     * @return if the menu is running
+     */
     public boolean getRun() { return this.run; }
 
     /**
@@ -262,7 +267,7 @@ public class Menu implements IMenu{
 
     /**
      * Método para mostrar a Querie 10
-     * @param fatTotal 
+     * @param fatTotal Todos os produtos a mostrar
      * @param mes mes pesquisado
      * @param filial filial pesquisada
      * @param time tempo que demorou a querie
