@@ -328,7 +328,7 @@ public class Controller {
                         this.model.read(fName);
                         this.crono.stop();
 
-                        this.menu.showSave(fName, this.crono.toString());
+                        this.menu.showLoad(fName, this.crono.toString());
 
                         this.menu.back();
                         error = "";
