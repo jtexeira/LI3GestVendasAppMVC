@@ -1,4 +1,5 @@
 package View;
+import Utils.IStringBetter;
 import Utils.StringBetter;
 
 import java.util.*;
@@ -77,7 +78,7 @@ public class Menu implements IMenu{
     }
 
     public void showQ1(List<String> notBought, String time){
-        Navigator<String> nav = new Navigator<>(notBought);
+        INavigator nav = new Navigator<>(notBought);
         this.menuNavigator(nav, time,"Produtos não comprados");
     }
 
@@ -111,7 +112,7 @@ public class Menu implements IMenu{
         List<List<String>> val = new ArrayList<>();
         val.add(valLine);
 
-        Table<String> tab = new Table<>(val, linLabl, colLabl);
+        ITable tab = new Table<>(val, linLabl, colLabl);
 
         this.displayMenuHeader(time);
         out.println("Mês [" + mes + "]:");
@@ -137,7 +138,7 @@ public class Menu implements IMenu{
         List<List<String>> val = new ArrayList<>();
         val.add(valLine);
 
-        Table<String> tab = new Table<>(val, linLabl, colLabl);
+        ITable tab = new Table<>(val, linLabl, colLabl);
 
         this.displayMenuHeader(time);
         out.println("Mês [" + mes + "]:");
@@ -148,7 +149,7 @@ public class Menu implements IMenu{
 
     public void showQ5(List<String> prodsCli, String client, String time){
         this.displayMenuHeader(time);
-        Navigator<String> nav = new Navigator<>(prodsCli);
+        INavigator nav = new Navigator<>(prodsCli);
         this.menuNavigator(nav, time,"Produtos mais comprados por " + client);
     }
 
@@ -204,7 +205,7 @@ public class Menu implements IMenu{
         for (String key : fatTotal.keySet())
             lines.add(key + " [" + String.format("%.2f", fatTotal.get(key)) + "]");
 
-        Navigator<String> nav = new Navigator<>(lines);
+        INavigator nav = new Navigator<>(lines);
         this.menuNavigator(nav, time, "Faturação total no mês [" + mes + "] na filial [" + filial + "]:");
     }
 
@@ -227,7 +228,7 @@ public class Menu implements IMenu{
         linLabl.add("Clientes que Compraram");
         linLabl.add("Clientes que não Compraram");
 
-        Table<String> tab = new Table<>(val, linLabl, colLabl);
+        ITable tab = new Table<>(val, linLabl, colLabl);
         out.println(tab);
 
         new Scanner(System.in).nextLine();
@@ -246,7 +247,7 @@ public class Menu implements IMenu{
         for(int i = 0; i < nFiliais; i++)
             linLabl.add("Clientes filial [" + (i+1) + "]");
 
-        Table<String> tab = new Table<>(monthly, linLabl, colLabl);
+        ITable tab = new Table<>(monthly, linLabl, colLabl);
 
         this.displayMenuHeader(time);
         out.println(tab);
@@ -272,7 +273,7 @@ public class Menu implements IMenu{
         new Scanner(System.in).nextLine();
     }
 
-    private <T> Table defaultTable(List <String> colLabl, List<List <T>> vals){
+    private <T> ITable defaultTable(List <String> colLabl, List<List <T>> vals){
         List<String> linLabl = new ArrayList<>();
         for(int i = 0; i < vals.size(); i++)
             linLabl.add((i +1) + "º");
@@ -286,14 +287,14 @@ public class Menu implements IMenu{
     }
 
     private String createHeader(){
-        StringBetter strHeader = new StringBetter("\t--");
+        IStringBetter strHeader = new StringBetter("\t--");
         for (MenuInd val : this.prev)
             strHeader.append(val.name()).append("/");
 
         return strHeader.append(this.menu.name()).append("--\n").red().toString();
     }
 
-    private <T> void menuNavigator(Navigator<T> nav, String time, String title){
+    private <T> void menuNavigator(INavigator nav, String time, String title){
         Scanner scanner = new Scanner(System.in);
         while(true){
             this.displayMenuHeader(time);
@@ -372,12 +373,10 @@ public class Menu implements IMenu{
                 this.options.add(MenuInd.Dynamic);
                 break;
             case Static:
-                this.options.clear();
                 this.options.add(MenuInd.Q1_1);
                 this.options.add(MenuInd.Q1_2);
                 break;
             case Dynamic:
-                this.options.clear();
                 this.options.add(MenuInd.Q1);
                 this.options.add(MenuInd.Q2);
                 this.options.add(MenuInd.Q3);

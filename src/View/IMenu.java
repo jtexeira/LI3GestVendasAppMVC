@@ -63,6 +63,10 @@ public interface IMenu {
 
         void showQ12(String time, List<List<String>> monthly, int nMeses, int nFiliais);
 
+    void showSave(String fName, String time);
+
+    void showLoad(String fName, String time);
+
 
         String toString();
 }

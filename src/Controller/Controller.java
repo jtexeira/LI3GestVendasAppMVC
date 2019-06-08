@@ -7,6 +7,8 @@ import Exceptions.MesInvalidoException;
 import Model.GestVendasModel;
 import Model.IGestVendasModel;
 import Utils.Crono;
+import Utils.ICrono;
+import View.IMenu;
 import View.Menu;
 
 import java.io.IOException;
@@ -16,9 +18,9 @@ import java.util.stream.Collectors;
 import static java.lang.System.out;
 
 public class Controller {
-    private final Menu menu;
+    private final IMenu menu;
     private IGestVendasModel model;
-    private final Crono crono;
+    private final ICrono crono;
 
     public Controller(Menu view, GestVendasModel model) {
         this.menu = view;
