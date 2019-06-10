@@ -64,18 +64,18 @@ Três ficheiros são fornecidos contendo informação sobre as transações de u
 \end{itemize}
 Com base nesses ficheiros é preciso responder a 12 querys fornecidas:
 \begin{enumerate}
-    \item Ler os ficheiros acima referidos validando cada linha.
-    \item Listar todos os produtos cujo ID comece por uma dada letra.
-    \item Total de vendas e total faturado num dado mês por um dado produto, distinguindo os totais N e P, global ou filial a filial.
-    \item Listar códigos de produto que ninguém comprou.
-    \item Listar clientes que compraram em todas as filiais.
-    \item Número de clientes e de produtos não referidos nas vendas.
-    \item Tabular o número de produtos comprados por um dado cliente, mês a mês e por filial.
-    \item Total de vendas num dado intervalo temporal.
-    \item Listar clientes que compraram um dado produtos numa dada filial, distinguindo compras N de P.
-    \item Listar os produtos mais comprados por um dado cliente num dado mês, por ordem descendente.
-    \item Listar os N produtos mais vendidos, com número de clientes e número de unidades vendidas, em cada filial. 
-    \item Listar os 3 produtos em que um dado cliente gastou mais dinheiro.
+    \item Estatísticas sobre os ficheiros lidos.
+    \item Números gerais sobre os dados carregados.
+    \item Lista dos códigos de produtos não comprados.
+    \item Número de vendas realizadas e clientes distintos, num dado mês e numa dada filial.
+    \item Número de produtos distintos e gastos totais mês a mês para um dado cliente.
+    \item Determinar mês a mês quantas vezes foi comprado, por quantos clientes e o total faturado de um dado produto.
+    \item Produtos mais comprados por um dado cliente e a sua quantidade.
+    \item X produtos mais vendidos todo o ano e o número de clientes que o compraram.
+    \item Determinar os 3 maiores compradores em cada filial.
+    \item X clientes que compraram mais produtos diferentes e quantos.
+    \item X clientes que compraram um dado produto e qual o valor gasto.
+    \item Calculara a faturação total de um dado produto, mês a mês e filial a filial.
 \end{enumerate}
 
 \chapter{Módulos e API}\label{chap:api}
@@ -156,13 +156,33 @@ e os menus de cada uma das categorias.
 
 \section{View}
 
-\subsection{Menu}
+\subsection{GestVendasView}
+
+Esta classe representa os vários Menus e as relações entre eles. Para permitir
+conhecer o caminho percorrido até ao menu que se está a observar esta classe
+contém uma stack com os menus percorridos.
 
 \subsection{Navigator}
 
+A fim de facilitar a apresentação de determinadas queries foi criada uma classe que apresenta uma
+lista de valores sobre a forma de páginas.\\
+De forma a que esta representação se ajuste ao terminal que está a ser utilizado, o número de linhas
+e de colunas que vai ser representado em cada página navegável é calculado com base no tamanho do
+terminal presente. Para tal, a classe Terminal é utilizada.
+
 \subsection{Table}
 
+Alguns dos dados obtidos nas queries variam em duas variáveis discretas finitas, como por exemplo
+ao mês a mês e filial a filial em simultâneo.\\
+Assim, naturalmente, a melhor forma de representar tais dados é através de uma tabela.
+Para tal foi desenvolvida uma classe para representar tabelas com um \textit{generic type parameter}.\\
+Consequentemente, esta classe apenas precisa de duas listas de etiquetas (uma para as linhas e
+outra para as colunas) e uma Lista de Listas com os dados para representar uma tabela visualmente
+apelativa em que cada coluna automaticamente adapta o seu tamanho ao seu conteúdo.
+
 \section{Exceptions}
+
+Esta Package contém todas as classes de exceções utilizadas ao longo do projeto.
 
 \section{Utils}
 
