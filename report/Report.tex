@@ -146,13 +146,6 @@ um array de três Filiais. Este módulo faz a ponte entre todos os módulos inte
 exterior, sendo este o módulo que ao qual o controlador faz pedidos, e tem 
 métodos capazes de responder a todas as queries pedidas.
 
-\section{Controller}
-
-Com o objetivo último de facilitar a pesquisa de queries, estas foram divididas em 3 categorias,
-Clientes, Produtos e Vendas. Para tornar a pesquisa ainda mais \textit{streamlined},
-algumas queries foram unidades, visto que a informação obtida está proximamente relacionada.
-Assim, no módulo do Controller estão os menus de escolha de categoria
-e os menus de cada uma das categorias.
 
 \section{View}
 
@@ -179,6 +172,11 @@ Para tal foi desenvolvida uma classe para representar tabelas com um \textit{gen
 Consequentemente, esta classe apenas precisa de duas listas de etiquetas (uma para as linhas e
 outra para as colunas) e uma Lista de Listas com os dados para representar uma tabela visualmente
 apelativa em que cada coluna automaticamente adapta o seu tamanho ao seu conteúdo.
+
+\section{Controller}
+
+Cria a ponte entre o View e o Model. Assim, o Controller é o único que conhece a view e o
+Model, sendo que tanto a View como o Model apenas conhecem o Controller.
 
 \section{Exceptions}
 
