@@ -149,6 +149,8 @@ métodos capazes de responder a todas as queries pedidas.
 
 \section{View}
 
+Esta \textit{package} contém as classes de apresentção dos resultados ao utilizador.
+
 \subsection{GestVendasView}
 
 Esta classe representa os vários Menus e as relações entre eles. Para permitir
@@ -178,11 +180,20 @@ apelativa em que cada coluna automaticamente adapta o seu tamanho ao seu conteú
 Cria a ponte entre o View e o Model. Assim, o Controller é o único que conhece a view e o
 Model, sendo que tanto a View como o Model apenas conhecem o Controller.
 
+\subsection{GestVendasController}
+
+Esta classe atua como o controlador do nosso projeto. Para além de funcionar como a ponte entre
+a lógica e a apresentação também cronometra o tempo demorado pela lógica a responder às queries pedidas
+e passa esse valor à \textit{View} para ser apresentado ao utilizador.
+
 \section{Exceptions}
 
 Esta Package contém todas as classes de exceções utilizadas ao longo do projeto.
 
 \section{Utils}
+
+A \textit{package} Utils contém classes que são utilizadas em várias partes do projeto e que não
+pertencem a uma parte específica da arquitetura \textit{MVC}.
 
 \subsection{Crono}
 
@@ -229,17 +240,6 @@ os pedidos do Controlador, e trata a informação contida em todos os módulos, 
 forma a devolver-lhe a informação pedida da forma mais eficiente. É nesta camada
 onde está toda a parte de algoritmos e dados, nunca esta conhecendo ou dada a
 conhecer à camada da Apresentação.
-
-\section{Controlador}
-
-O Controlador tem como base dois grandes módulos, o módulo queryUI e o módulo controller.
-O controller contém os menus de escolha das categorias e os menus de escolha de queries.
-O queryUI contém os menus para cada query individual.
-
-\section{Apresentação}
-
-A apresentação contém apenas um módulo, o view. Este contém funções de apresentação genérica,
-tais como funções para apresentar array de strings e funções para apresentar matrizes de inteiros.
 
 \chapter{Estruturas de dados}
 
