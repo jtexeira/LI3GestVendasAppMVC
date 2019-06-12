@@ -4,7 +4,7 @@
 \usepackage{hyperref}
 \usepackage{a4wide}
 \hypersetup{pdftitle={Sistema de Gestão de Vendas},
-pdfauthor={José Ferreira},
+pdfauthor={José Ferreira, João Teixeira},
 colorlinks=true,
 urlcolor=blue,
 linkcolor=black}
@@ -22,7 +22,7 @@ linkcolor=black}
 
 \title{Sistema de Gestão de Vendas\\ 
 \large Grupo Nº 56}
-\author{José Ferreira (A83683)}
+\author{José Ferreira (A83683) \and João Teixeira (A85504)}
 \date{\today}
 
 \begin{center}
@@ -138,14 +138,18 @@ que produtos compraram e respetiva faturação, e uma segunda que contém
 informação relativa a todos os produtos vendidos na dada filial, mais 
 concretamente que clientes adquiriram o produto.
 
-\subsection{SGV}
+\subsection{Constantes}
 
-O módulo SGV é o módulo que junta todos os acima descritos, contendo este uma estrutura
+No módulo constantes, são guardadas todas as informações referentes ao número de
+filiais, ficheiros a ler, entre outros, que são lidas de um ficheiro de configs
+
+\subsection{GestVendasModel}
+
+O módulo GestVendasModel é o módulo que junta todos os acima descritos, contendo este uma estrutura
 que contém um Catálogo de Produtos, um Catálogo de Clientes, uma estrutura Faturação e 
-um array de três Filiais. Este módulo faz a ponte entre todos os módulos internos e o 
+uma List de Filiais. Este módulo faz a ponte entre todos os módulos internos e o 
 exterior, sendo este o módulo que ao qual o controlador faz pedidos, e tem 
 métodos capazes de responder a todas as queries pedidas.
-
 
 \section{View}
 
@@ -235,8 +239,8 @@ Controlador).
 
 O modelo tem como base dois grandes módulos, o módulo Filial e o módulo Facturação,
 e têm como módulos auxiliares ambos os Catálogos de Produtos e de Clientes.\\
-Estes dois grandes módulos estão unidos num módulo mais geral, SGV, e este recebe
-os pedidos do Controlador, e trata a informação contida em todos os módulos, de 
+Estes dois grandes módulos estão unidos num módulo mais geral, GereVendasModel, e este recebe
+os pedidos do GereVendasController, e trata a informação contida em todos os módulos, de 
 forma a devolver-lhe a informação pedida da forma mais eficiente. É nesta camada
 onde está toda a parte de algoritmos e dados, nunca esta conhecendo ou dada a
 conhecer à camada da Apresentação.
@@ -270,22 +274,10 @@ tempos de resposta a queries.
 
 \chapter{Testes e Benchmarks}
 
-Durante a execução do nosso projeto, foram efetuados diversos testes ao código, com
-ferramentas como \textit{Valgrind}, para verificar a presença de \textit{memory 
-leaks}, \textit{memusage}, para fazer proffiling à memoria utilizada, \textit{gprof}
-para ver quais funções pesam mais na execução do programa, com vista a otimizar as
-partes mais lentas, e para medição dos tempos de execução utilizamos a biblioteca
-\textit{time.h}.
-
-\section{Memória}
-
-Utilizando a ferramenta \textit{Valgrind}, conseguimos verificar que o programa
-corre sem \textit{memory leaks}, à exceção de algumas causadas pela biblioteca
-\textit{glib}.\\
-
-Com a ferramenta \textit{memusage}, obtivemos o gráfico de uso de memória presente
-na figura \ref{img:memusage}, concluindo que as nossas estruturas preenchidas com
-os dados dados, estão a consumir, em pico, por volta dos 360MB.
+Durante a execução do nosso projeto, foram efetuados diversos testes, quer ao nível
+de formas de leitura do ficheiro, em particular, \textit{BufferedReader} e \textit{Files},
+bem como testes ao nível das diversas implementações das Interfaces \textit{Map<K,V>},
+\textit{Set<E>} e \textit{List<E>}
 
 \section{Tempos de execução}
 
@@ -318,6 +310,37 @@ necessário.
         \caption{Grafo de Dependências do projeto gerado pela ferramenta \textit{Doxygen}}
     \end{center}
 \end{figure}
+
+\chapter{Benchmarks BufferedReader vs Files}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{| c | c | c | c |}
+            \hline
+            & 1 Milhão & 3 Milhões & 5 Milhões \\
+            \hline
+            Leitura BufferedReader & 162 & 434 & 750 \\
+            \hline
+            Leitura Files & 173 &  & 773 \\
+            \hline
+            Parse BufferedReader & 871 & 1884 & 3013 \\
+            \hline
+            Parse Files & 861 & 1948 & 3017 \\
+            \hline
+            Validação BufferedReader & 1316 & 3120 & 4380 \\
+            \hline
+            Validação Files & 1139 & 2755 & 4380 \\
+            \hline
+            Validação Paralela BF & 795 & 1535 & 2203 \\
+            \hline
+            Validação Paralela Files & 828 & 1572 & 2222 \\
+            \hline
+
+        \end{tabular}
+        \caption{Tempo (em ms) de tempos de BufferedReader vs Files}
+        \label{tab:BFvsF}
+    \end{center}
+\end{table}
 
 \chapter{Tabela de Tempos de Execução}
 

@@ -8,10 +8,16 @@ public class Terminal implements ITerminal{
     private int columns;
     private int lines;
 
+    /**
+     * construtor da classe Terminal
+     */
     public Terminal() {
         this.update();
     }
 
+    /**
+     * Atualiza o tamanho do terminal
+     */
     public void update() {
         StringBuilder rColumns = new StringBuilder();
         try {
@@ -19,15 +25,14 @@ public class Terminal implements ITerminal{
                     "bash", "-c", "tput cols 2> /dev/tty" });
             readResult(rColumns, p);
 
-        } catch (IOException e) {
-            System.out.println(e);
         }
+        catch (IOException e) { }
         try {
             this.columns = Integer.parseInt(rColumns.toString());
         }
         catch (NumberFormatException e)
         {
-            this.columns = 130;
+            this.columns = 120;
         }
 
         StringBuilder rLines = new StringBuilder();
@@ -36,9 +41,8 @@ public class Terminal implements ITerminal{
                     "bash", "-c", "tput lines 2> /dev/tty" });
             readResult(rLines, p);
 
-        } catch (IOException e) {
-            System.out.println(e);
         }
+        catch (IOException e) { }
         try {
             this.lines = Integer.parseInt(rLines.toString());
         }
@@ -59,20 +63,26 @@ public class Terminal implements ITerminal{
         in.close();
     }
 
+    /**
+     * obter numero de colunas do terminal
+     * @return número de colunas do terminal
+     */
     public int getColumns() {
         return columns;
     }
 
+    /**
+     * obter numero de linhas do terminal
+     * @return número de linhas do terminal
+     */
     public int getLines() {
         return lines;
     }
 
     @Override
     public String toString() {
-        return new StringBuilder()
-                .append(this.columns)
-                .append("x")
-                .append(this.lines)
-                .toString();
+        return String.valueOf(this.columns) +
+                " x " +
+                this.lines;
     }
 }

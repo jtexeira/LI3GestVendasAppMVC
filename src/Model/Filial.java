@@ -1,9 +1,11 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Filial implements IFilial{
+public class Filial implements IFilial, Serializable {
+    private static final long serialVersionUID = 865079364397565662L;
     private Map<String, List<IVenda>> infoClients;
     private Map<String, List<IVenda>> infoProds;
 
@@ -53,7 +55,7 @@ public class Filial implements IFilial{
                 .entrySet()
                 .stream()
                 .map(e -> new AbstractMap
-                        .SimpleEntry<String, Double>(e.getKey(),
+                        .SimpleEntry<>(e.getKey(),
                         e.getValue()
                                 .stream()
                                 .mapToDouble(IVenda::totalSale)
@@ -141,8 +143,10 @@ public class Filial implements IFilial{
      * fizeram e quanto foi faturado no mes
      */
     public Map.Entry<Set<String>, Map.Entry<Integer, Double>> statsCliente(String clientID, int mes) {
-        List<IVenda> a = this.infoClients.get(clientID).stream().filter(e -> e.getMonth() == mes).collect(Collectors.toList());
-        return getSetEntryEntry(a);
+        List<IVenda> a = this.infoClients.get(clientID);
+        if(a != null)
+                return getSetEntryEntry(a.stream().filter(e -> e.getMonth() == mes).collect(Collectors.toList()));
+        return null;
     }
 
     private Map.Entry<Set<String>, Map.Entry<Integer, Double>> getSetEntryEntry(List<IVenda> a) {
@@ -167,8 +171,10 @@ public class Filial implements IFilial{
      * e quanto foi faturado no mes
      */
     public Map.Entry<Set<String>, Map.Entry<Integer, Double>> statsProduto(String productID, int mes) {
-        List<IVenda> a = this.infoProds.get(productID).stream().filter(e -> e.getMonth() == mes).collect(Collectors.toList());
-        return getSetEntryEntry(a);
+        List<IVenda> a = this.infoProds.get(productID);
+        if(a != null)
+            return getSetEntryEntry(a.stream().filter(e -> e.getMonth() == mes).collect(Collectors.toList()));
+        return null;
     }
 
     /**

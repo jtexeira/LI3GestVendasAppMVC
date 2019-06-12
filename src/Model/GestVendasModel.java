@@ -1,6 +1,7 @@
 package Model;
 
 import Exceptions.*;
+import Utils.Crono;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -8,19 +9,53 @@ import java.util.*;
 import java.nio.file.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class GestVendasModel implements Serializable{
-    private String vendasFile;
+public class GestVendasModel implements Serializable, IGestVendasModel{
+    private static final long serialVersionUID = 6630744916568124368L;
     private int vendasLidas;
-    private String productFile;
-    private String clientFile;
     private ICatCli catCli;
     private ICatProds catProds;
     private List<IVenda> vendas;
     private IFaturacao faturacao;
     private IFilial[] filiais;
-    private Constantes constantes;
+    private IConstantes constantes;
+    private final Crono time;
 
+    /**
+     * Construtuor do Model com toda a informacao necessaria para responder a qualquer pedido
+     * @param configs Ficheiro com as configurações
+     * @throws IOException Exceção se ocorrer erros a ler os ficheiros
+     */
+    public GestVendasModel(String configs) throws IOException{
+        this.constantes = new Constantes(configs);
+        this.time = new Crono();
+        this.time.start();
+        this.catCli = new CatCli(this.constantes.getClients());
+        this.catProds = new CatProds(this.constantes.getProds());
+        this.vendasLidas = 0;
+        List<String> venda = new ArrayList<>();
+        BufferedReader inFile = new BufferedReader(new FileReader(this.constantes.getSales()));
+        String linha;
+        while((linha = inFile.readLine()) != null)
+                venda.add(linha);
+        this.vendasLidas = venda.size();
+        this.vendas = venda
+                .parallelStream()
+                .map(Venda::new)
+                .filter(e -> e.validSale(this.constantes)
+                        && catProds.exists(e.getCodProd())
+                        && catCli.exists(e.getCodCli()))
+                .collect(Collectors
+                        .toList());
+        faturacao = new Faturacao(catProds);
+        this.filiais = new Filial[constantes.numeroFiliais()];
+        for (int i = 0; i < constantes.numeroFiliais(); i++) {
+            this.filiais[i] = new Filial();
+        }
+        this.vendas.forEach(e -> {this.faturacao.update(e); this.filiais[e.getFilial()-1].update(e);});
+        this.time.stop();
+    }
     /**
      * Construtuor do Model com toda a informacao necessaria para responder a qualquer pedido
      * @param clients Caminho do ficheiro de clientes
@@ -29,28 +64,51 @@ public class GestVendasModel implements Serializable{
      * @throws IOException Exceção se ocorrer erros a ler os ficheiros
      */
     public GestVendasModel(String clients, String products, String sales) throws IOException{
+        this.constantes = new Constantes("db/configs.txt");
+        this.time = new Crono();
+        this.time.start();
         this.catCli = new CatCli(clients);
-        this.clientFile = clients;
         this.catProds = new CatProds(products);
-        this.productFile = products;
-        this.constantes = new Constantes();
         this.vendasLidas = 0;
-        this.vendas = Files
-                .readAllLines(Paths.get(sales), StandardCharsets.UTF_8)
-                .stream()
-                .map(e ->{this.vendasLidas++; return new Venda(e);})
-                .filter(e -> e.validSale()
+        List<String> venda = Files
+                .readAllLines(Paths.get(sales), StandardCharsets.UTF_8);
+        this.vendasLidas = venda.size();
+        this.vendas = venda
+                .parallelStream()
+                .map(Venda::new)
+                .filter(e -> e.validSale(this.constantes)
                         && catProds.exists(e.getCodProd())
                         && catCli.exists(e.getCodCli()))
                 .collect(Collectors
                         .toList());
-        this.vendasFile = sales;
         faturacao = new Faturacao(catProds);
         this.filiais = new Filial[constantes.numeroFiliais()];
         for (int i = 0; i < constantes.numeroFiliais(); i++) {
             this.filiais[i] = new Filial();
         }
         this.vendas.forEach(e -> {this.faturacao.update(e); this.filiais[e.getFilial()-1].update(e);});
+        this.time.stop();
+    }
+
+    /**
+     * @return Tempo que demorou a ser inicializado o model
+     */
+    public String time() {
+        return this.time.toString();
+    }
+
+    /**
+     * @return Número de Filiais atual
+     */
+    public int numeroFiliais() {
+        return this.constantes.numeroFiliais();
+    }
+
+    /**
+     * @return Número de Meses
+     */
+    public int meses() {
+        return this.constantes.meses();
     }
 
     /**
@@ -70,7 +128,7 @@ public class GestVendasModel implements Serializable{
      * @return Numero de vendas invalidas
      */
     public int vendasInvalidas() {
-        return -this.vendas.size() + this.vendasLidas;
+        return this.vendasLidas - this.vendas.size();
     }
 
     /**
@@ -78,7 +136,7 @@ public class GestVendasModel implements Serializable{
      * @return Caminho do ficheiro de vendas
      */
     public String getVendasFile() {
-        return this.vendasFile;
+        return this.constantes.getSales();
     }
 
     /**
@@ -86,7 +144,7 @@ public class GestVendasModel implements Serializable{
      * @return Caminho do ficheiro de Produtos
      */
     public String getProductFile() {
-        return this.productFile;
+        return this.constantes.getProds();
     }
 
     /**
@@ -94,7 +152,7 @@ public class GestVendasModel implements Serializable{
      * @return Caminho do ficheiro de Clientes
      */
     public String getClientFile() {
-        return this.clientFile;
+        return this.constantes.getClients();
     }
 
     /**
@@ -110,7 +168,7 @@ public class GestVendasModel implements Serializable{
      * @return Numero de produtos comprados e nao comprados
      */
     public Map.Entry<Integer, Integer> getProdutosComprados() {
-        int a = this.faturacao.produtosComprados();
+        int a = (int) this.vendas.stream().map(IVenda::getCodProd).distinct().count();
         return new AbstractMap.SimpleEntry<>(a, this.catProds.howMany() - a);
     }
 
@@ -252,9 +310,11 @@ public class GestVendasModel implements Serializable{
         double total = 0;
         for(IFilial a : this.filiais) {
             Map.Entry<Set<String>, Map.Entry<Integer,Double>> o = a.statsCliente(clientID, mes);
-            ree.addAll(o.getKey());
-            vezes += o.getValue().getKey();
-            total += o.getValue().getValue();
+            if(o != null) {
+                ree.addAll(o.getKey());
+                vezes += o.getValue().getKey();
+                total += o.getValue().getValue();
+            }
         }
         return new AbstractMap.SimpleEntry<>(ree.size(), new AbstractMap.SimpleEntry<>(vezes, total));
     }
@@ -279,9 +339,11 @@ public class GestVendasModel implements Serializable{
         double total = 0;
         for(IFilial a : this.filiais) {
             Map.Entry<Set<String>, Map.Entry<Integer,Double>> o = a.statsProduto(productID, mes);
-            ree.addAll(o.getKey());
-            vezes += o.getValue().getKey();
-            total += o.getValue().getValue();
+            if(o != null) {
+                ree.addAll(o.getKey());
+                vezes += o.getValue().getKey();
+                total += o.getValue().getValue();
+            }
         }
         return new AbstractMap.SimpleEntry<>(ree.size(), new AbstractMap.SimpleEntry<>(vezes, total));
     }
@@ -321,23 +383,30 @@ public class GestVendasModel implements Serializable{
     /**
      * Determina a lista ordenada dos produtos mais vendidos durante o ano,
      * bem como quem os comprou
-     * @param limite Numero de produtos que pretendemos saber
      * @return Lista ordenada dos produtos mais vendidos
      */
-    public List<Map.Entry<String, Integer>> produtosMaisVendidos(int limite) {
-        List<Map<String, Map.Entry<Integer,Integer>>> a = new ArrayList<>();
-        for(IFilial x : this.filiais) {
-            a.add(x.produtosMaisVendidos());
-        }
-        return Arrays.stream(this.filiais)
-                .flatMap(e -> e.produtosMaisVendidos().entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> new AbstractMap.SimpleEntry<>(e1.getKey(), e1.getValue() + e2.getValue())))
+    public List<Map.Entry<String, Integer>> produtosMaisVendidos() {
+        return this.vendas.stream()
+                .collect(Collectors.toMap(IVenda::getCodProd,
+                        e -> Stream.of(e)
+                                .collect(Collectors.toList()),
+                        (e1, e2) -> {e1.addAll(e2);
+                            return e1;}))
                 .entrySet()
                 .stream()
-                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue(Map.Entry.comparingByKey())))
-                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue().getValue()))
+                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(),
+                        e.getValue()
+                                .stream()
+                                .collect(Collectors.toMap(IVenda::getCodCli,
+                                        IVenda::getQuant,
+                                        Integer::sum))))
+                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(),
+                        new AbstractMap.SimpleEntry<>(e.getValue().size(),
+                                e.getValue().values().stream()
+                                        .mapToInt(Integer::intValue)
+                                        .sum())))
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue(Map.Entry.comparingByValue(Integer::compareTo))))
+                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue().getKey()))
                 .collect(Collectors.toList());
     }
 
@@ -359,14 +428,15 @@ public class GestVendasModel implements Serializable{
 
     /**
      * Determina a lista de clientes que compraram mais produtos diferentes
-     * @param limite Numero de clientes pretendidos
      * @return Lista de clientes ordenada pelo numero de produtos distintos
      * comprados
      */
-    public List<String> clientesComMaisDiversidade(int limite) {
+    public List<String> clientesComMaisDiversidade() {
         List<Map<String, Set<String>>> a = new ArrayList<>();
         for(IFilial x : this.filiais) {
-            a.add(x.maisDiversidadeDeProdutos());
+            Map<String, Set<String>> o = x.maisDiversidadeDeProdutos();
+            if(o != null)
+                a.add(o);
         }
         return a.stream()
                 .flatMap(e -> e.entrySet().stream())
@@ -388,17 +458,16 @@ public class GestVendasModel implements Serializable{
      * Determina a lista de clientes que mais compraram um dado produto e quanto
      * gastaram no total
      * @param prodID Codigo do Produto em questao
-     * @param limite Numero de clientes desejado
      * @return Lista ordenada dos clientes que mais compraram o produto
      * @throws InvalidProductExecption Exceção se o Produto não existir
      */
-    public List<Map.Entry<String,Double>> clientesQueMaisCompraram(String prodID, int limite) throws InvalidProductExecption {
+    public List<Map.Entry<String,Double>> clientesQueMaisCompraram(String prodID) throws InvalidProductExecption {
         if(!this.catProds.exists(prodID))
             throw new InvalidProductExecption();
         return Arrays.stream(filiais)
-                .flatMap(e -> e.clientesQueMaisCompraram(prodID)
-                        .entrySet()
-                        .stream())
+                .map(e -> e.clientesQueMaisCompraram(prodID))
+                .filter(Objects::nonNull)
+                .flatMap(e -> e.entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Double::sum))
                 .entrySet()
                 .stream()
@@ -448,6 +517,8 @@ public class GestVendasModel implements Serializable{
      * Carrega o Model de um ficheiro de ObjectStream
      * @param fName Caminho do ficheiro a carregar
      * @return Modelo lido
+     * @throws IOException Erro a ler do ficheiro
+     * @throws ClassNotFoundException O ficheiro lido é invalido
      */
     public static GestVendasModel read(String fName) throws IOException, ClassNotFoundException {
         FileInputStream r = new FileInputStream(fName);

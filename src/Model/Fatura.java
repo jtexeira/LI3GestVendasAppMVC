@@ -1,9 +1,12 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Fatura implements IFatura {
+public class Fatura implements IFatura, Serializable {
+    private static final long serialVersionUID = 390685106496680839L;
     private String prodId;
+    private boolean foiComprado;
     private int[][] nVendas; //mes filial
     private double[][] total; //mes filial
     private int[] quant;
@@ -14,6 +17,7 @@ public class Fatura implements IFatura {
      */
     Fatura(String id) {
         this.prodId = id;
+        this.foiComprado = false;
         this.nVendas = new int[3][12];
         this.total = new double[3][12];
         this.quant = new int[12];
@@ -25,6 +29,7 @@ public class Fatura implements IFatura {
      */
     private Fatura(Fatura a) {
         this.prodId = a.prodId;
+        this.foiComprado = a.foiComprado;
         this.nVendas = a.nVendas.clone();
         this.total = a.total.clone();
         this.quant = a.quant.clone();
@@ -36,6 +41,7 @@ public class Fatura implements IFatura {
      * @return Fatura atualizada
      */
     public Fatura update(IVenda v) {
+        this.foiComprado = true;
         this.nVendas[v.getFilial()-1][v.getMonth()-1]++;
         this.total[v.getFilial()-1][v.getMonth()-1] += v.totalSale();
         this.quant[v.getMonth()-1] += v.getQuant();
@@ -91,6 +97,14 @@ public class Fatura implements IFatura {
     @Override
     public String getProdId() {
         return this.prodId;
+    }
+
+    /**
+     * Determina de um produto foi comprado ou não
+     * @return Se o produto foi comprado ou não
+     */
+    public boolean isFoiComprado() {
+        return this.foiComprado;
     }
 
     /**

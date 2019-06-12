@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -8,7 +9,8 @@ import java.util.stream.Collectors;
 /**
  * Representa toda a faturação do sistema
  */
-public class Faturacao implements IFaturacao{
+public class Faturacao implements IFaturacao, Serializable {
+    private static final long serialVersionUID = 3685986535800590995L;
     private Map<String, IFatura> faturacao;
 
     /**
@@ -75,7 +77,7 @@ public class Faturacao implements IFaturacao{
         return (int) this.faturacao
                 .values()
                 .stream()
-                .filter(e -> !(e.getProdId().equals("")))
+                .filter(IFatura::isFoiComprado)
                 .count();
     }
 
@@ -87,7 +89,7 @@ public class Faturacao implements IFaturacao{
         return this.faturacao
                 .values()
                 .stream()
-                .filter(e -> e.getProdId().equals(""))
+                .filter(e -> !e.isFoiComprado())
                 .map(IFatura::getProdId)
                 .sorted()
                 .collect(Collectors.toList());
