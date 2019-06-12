@@ -62,20 +62,20 @@ Três ficheiros são fornecidos contendo informação sobre as transações de u
     \item Outro, ids de clientes.
     \item O último integra informações sobre cada venda efetuada ao longo de um ano. 
 \end{itemize}
-Com base nesses ficheiros é preciso responder a 12 querys fornecidas:
+Com base nesses ficheiros é preciso responder a 12 queries fornecidas:
 \begin{enumerate}
     \item Estatísticas sobre os ficheiros lidos.
     \item Números gerais sobre os dados carregados.
     \item Lista dos códigos de produtos não comprados.
     \item Número de vendas realizadas e clientes distintos, num dado mês e numa dada filial.
     \item Número de produtos distintos e gastos totais mês a mês para um dado cliente.
-    \item Determinar mês a mês quantas vezes foi comprado, por quantos clientes e o total faturado de um dado produto.
+    \item Determinar mês a mês quantas vezes foi comprado, por quantos clientes e o total facturado de um dado produto.
     \item Produtos mais comprados por um dado cliente e a sua quantidade.
     \item X produtos mais vendidos todo o ano e o número de clientes que o compraram.
     \item Determinar os 3 maiores compradores em cada filial.
     \item X clientes que compraram mais produtos diferentes e quantos.
     \item X clientes que compraram um dado produto e qual o valor gasto.
-    \item Calculara a faturação total de um dado produto, mês a mês e filial a filial.
+    \item Calculara a facturação total de um dado produto, mês a mês e filial a filial.
 \end{enumerate}
 
 \chapter{Módulos e API}\label{chap:api}
@@ -85,13 +85,13 @@ Com base nesses ficheiros é preciso responder a 12 querys fornecidas:
 \subsection{Cliente}
 
 O módulo de Cliente tem uma API capaz de lidar com a informação de um cliente
-individual e respetiva informação relativa a onde efetuou compras, com vista
+individual e respectiva informação relativa a onde efectuou compras, com vista
 à melhor resposta de queries que envolvam tal informação.
 
 \subsection{Clientes}
 
 O módulo de Clientes tem uma API capaz de lidar com a informação de todos os
-clientes, respetivo armazenamento e pesquisa. \\ 
+clientes, respectivo armazenamento e pesquisa. \\ 
 Como estrutura principal de armazenamento dos Clientes individuais, após testes 
 testar várias estruturas, optamos por escolher Hashtables da biblioteca GLib, 
 da Gnome.
@@ -104,7 +104,7 @@ onde foi vendido.
 
 \subsection{Produtos}
 
-No módulo de Produtos, a API está construida de maneira a que seja capaz de
+No módulo de Produtos, a API está construída de maneira a que seja capaz de
 lidar, de forma eficiente com o armazenamento e pesquisa de todos os produtos.\\
 Para este módulo, como no módulo de Clientes, decidimos utilizar as mesmas Hashtables
 da biblioteca GLib da Gnome.
@@ -114,12 +114,12 @@ da biblioteca GLib da Gnome.
 No módulo de Venda, temos uma API capaz de dar parse de uma string com o formato 
 previamente definido, colocar numa estrutura com os campos necessários de maneira
 a preservar a informação, para posteriormente ser tratada pelo módulo de Filiais e
-Faturação.
+Facturação.
 
-\subsection{Fatura}
+\subsection{Factura}
 
 Neste módulo, a API está definida de forma a conseguir, a partir de uma Venda,
-criar/atualizar uma fatura, contendo esta, a faturação relativa a um produto.
+criar/actualizar uma factura, contendo esta, a facturação relativa a um produto.
 
 \subsection{Faturas}
 
@@ -149,7 +149,7 @@ métodos capazes de responder a todas as queries pedidas.
 
 \section{View}
 
-Esta \textit{package} contém as classes de apresentção dos resultados ao utilizador.
+Esta \textit{package} contém as classes de apresentação dos resultados ao utilizador.
 
 \subsection{GestVendasView}
 
@@ -182,7 +182,7 @@ Model, sendo que tanto a View como o Model apenas conhecem o Controller.
 
 \subsection{GestVendasController}
 
-Esta classe atua como o controlador do nosso projeto. Para além de funcionar como a ponte entre
+Esta classe actua como o controlador do nosso projeto. Para além de funcionar como a ponte entre
 a lógica e a apresentação também cronometra o tempo demorado pela lógica a responder às queries pedidas
 e passa esse valor à \textit{View} para ser apresentado ao utilizador.
 
@@ -205,7 +205,7 @@ de forma a apresentar os tempos calculados de forma legível.
 
 \subsection{Terminal}
 
-A classe Terminal calcula o tamanho do terminla onde o programa está a correr.
+A classe Terminal calcula o tamanho do terminal onde o programa está a correr.
 Para tal realiza duas \textit{System Calls} com dois \textit{Fork exec} (uma para obter a altura
 e outra para obter a largura do terminal).
 Para recalcular o tamanho basta chamar o método \textit{update}.
@@ -233,7 +233,7 @@ Controlador).
 
 \section{Modelo}
 
-O modelo tem como base dois grandes módulos, o módulo Filial e o módulo Faturação,
+O modelo tem como base dois grandes módulos, o módulo Filial e o módulo Facturação,
 e têm como módulos auxiliares ambos os Catálogos de Produtos e de Clientes.\\
 Estes dois grandes módulos estão unidos num módulo mais geral, SGV, e este recebe
 os pedidos do Controlador, e trata a informação contida em todos os módulos, de 
