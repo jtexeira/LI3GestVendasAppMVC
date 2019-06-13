@@ -270,10 +270,13 @@ mais comum \textit{ArrayList}.
 
 \section{Tempos de Leitura}
 Ao nível de leitura, foram efetuados benchmarks para comparar a performance de
-\textit{Files} e de \textit{BufferedReader} vistos em no apêndice \ref{chap:brf}, sendo o
-\textit{Files} mais lento e já que internamente \textit{Files} utiliza internamente
+\textit{Files} e de \textit{BufferedReader} vistos em no apêndice \ref{chap:brf}. Sendo o
+\textit{Files} mais lento e já que o \textit{Files} utiliza internamente um
 \textit{BufferedReader}, acabamos por utilizar o \textit{BufferedReader} para a leitura
-dos ficheiros com a informação.
+dos ficheiros com a informação. Testamos também a leitura e validação dos ficheiros
+tirando partido do paralelismo intrínseco da JVM8, utilizando uma Stream<Venda>
+verificando que os tempos de carregamento baixavam para perto de metade, no caso do
+ficheiro com 5 milhões de vendas.
 
 \chapter{Conclusão}
 
