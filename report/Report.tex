@@ -3,7 +3,7 @@
 \usepackage[portuguese]{babel}
 \usepackage{hyperref}
 \usepackage{a4wide}
-\hypersetup{pdftitle={Sistema de Gestão de Vendas},
+\hypersetup{pdftitle={GestVendas},
 pdfauthor={José Ferreira, João Teixeira},
 colorlinks=true,
 urlcolor=blue,
@@ -20,7 +20,7 @@ linkcolor=black}
 
 \begin{document}
 
-\title{Sistema de Gestão de Vendas\\ 
+\title{GestVendas\\ 
 \large Grupo Nº 56}
 \author{José Ferreira (A83683) \and João Teixeira (A85504)}
 \date{\today}
@@ -81,10 +81,10 @@ Com base nesses ficheiros é preciso responder a 12 queries fornecidas:
 \chapter{Módulos e API}\label{chap:api}
 
 Tendo em conta as características do projeto, concluímos que a arquitetura que melhor
-abrangia os critérios pedidos era a Arquitetura do tipo \textit{MVC} (Modelo, Apresentação e
-Controlador).
-Um dos critérios que mais fez o grupo gravitar em direcção a esta escolha foi a modularidade
-inerente a esta arquitetura.
+abrangia os critérios pedidos era a Arquitetura do tipo \textit{MVC} (Modelo, 
+Apresentação e Controlador).
+Um dos critérios que mais fez o grupo gravitar em direcção a esta escolha foi 
+a modularidade inerente a esta arquitetura.
 
 \section{Model}
 
@@ -153,7 +153,7 @@ filiais, ficheiros a ler, entre outros, que são lidas de um ficheiro de configs
 O módulo GestVendasModel é o módulo que junta todos os acima descritos, 
 contendo este uma estrutura
 que contém um Catálogo de Produtos, um Catálogo de Clientes, uma estrutura Faturação e 
-uma List de Filiais. Este módulo faz a ponte entre todos os módulos internos e o 
+um array de Filiais. Este módulo faz a ponte entre todos os módulos internos e o 
 exterior, sendo este o módulo que ao qual o controlador faz pedidos, e tem 
 métodos capazes de responder a todas as queries pedidas.
 
@@ -169,21 +169,24 @@ contém uma stack com os menus percorridos.
 
 \subsection{Navigator}
 
-A fim de facilitar a apresentação de determinadas queries foi criada uma classe que apresenta uma
-lista de valores sobre a forma de páginas.\\
-De forma a que esta representação se ajuste ao terminal que está a ser utilizado, o número de linhas
-e de colunas que vai ser representado em cada página navegável é calculado com base no tamanho do
-terminal presente. Para tal, a classe Terminal é utilizada.
+A fim de facilitar a apresentação de determinadas queries foi criada uma classe que 
+apresenta uma lista de valores sobre a forma de páginas.\\
+De forma a que esta representação se ajuste ao terminal que está a ser utilizado, 
+o número de linhas e de colunas que vai ser representado em cada página navegável 
+é calculado com base no tamanho do terminal presente. Para tal, a classe Terminal 
+é utilizada.
 
 \subsection{Table}
 
 Alguns dos dados obtidos nas queries variam em duas variáveis discretas finitas, como por exemplo
 ao mês a mês e filial a filial em simultâneo.\\
 Assim, naturalmente, a melhor forma de representar tais dados é através de uma tabela.
-Para tal foi desenvolvida uma classe para representar tabelas com um \textit{generic type parameter}.\\
-Consequentemente, esta classe apenas precisa de duas listas de etiquetas (uma para as linhas e
-outra para as colunas) e uma Lista de Listas com os dados para representar uma tabela visualmente
-apelativa em que cada coluna automaticamente adapta o seu tamanho ao seu conteúdo.
+Para tal foi desenvolvida uma classe para representar tabelas com um 
+\textit{generic type parameter}.\\
+Consequentemente, esta classe apenas precisa de duas listas de etiquetas (uma 
+para as linhas e outra para as colunas) e uma Lista de Listas com os dados para 
+representar uma tabela visualmente apelativa em que cada coluna automaticamente 
+adapta o seu tamanho ao seu conteúdo.
 
 \section{Controller}
 
@@ -244,15 +247,11 @@ vermelho basta escrever.
 
 O modelo tem como base dois grandes módulos, o módulo Filial e o módulo Facturação,
 e têm como módulos auxiliares ambos os Catálogos de Produtos e de Clientes.\\
-Estes dois grandes módulos estão unidos num módulo mais geral, GereVendasModel, e este recebe
-os pedidos do GereVendasController, e trata a informação contida em todos os módulos, de 
-forma a devolver-lhe a informação pedida da forma mais eficiente. É nesta camada
-onde está toda a parte de algoritmos e dados, nunca esta conhecendo ou dada a
-conhecer à camada da Apresentação.
-
-\chapter{Estruturas de dados}
-
-
+Estes dois grandes módulos estão unidos num módulo mais geral, GereVendasModel, 
+e este recebe os pedidos do GereVendasController, e trata a informação contida 
+em todos os módulos, de forma a devolver-lhe a informação pedida da forma mais 
+eficiente. É nesta camada onde está toda a parte de algoritmos e dados, nunca 
+esta conhecendo ou dada a conhecer à camada da Apresentação.
 
 \chapter{Testes e Benchmarks}
 
@@ -263,14 +262,23 @@ bem como testes ao nível das diversas implementações das Interfaces \textit{M
 
 \section{Tempos de execução}
 
-Com recurso à biblioteca de C \textit{time.h}, efetuamos alguns benchmarks, obtendo
-a tabela \ref{tab:benches}, com os tempos médios de execução, com vários números 
-de vendas, concluindo assim que os tempos das queries são independentes do número de 
-vendas, tendo este fator apenas impacto nos tempos de load.
-\\
-Correndo a ferramenta \textit{gprof}, observamos que a função onde é gasto mais tempo
-é a função que cria faturas, pois esta tem cálculos demorados, o que levou a que não 
-a conseguíssemos otimizar.
+Com recurso à classe fornecida \textit{Crono}, efetuamos alguns benchmarks, obtendo
+a tabela \ref{tab:benches}, com os tempos médios de execução, com os diversos ficheiros
+de vendas fornecidos.\\
+Nestes vários benchmarks, testamos diferentes implementações das Interfaces \textit{Map},
+nomeadamente, \textit{HashMap} e \textit{TreeMap}, concluindo assim que os tempos de 
+que os \textit{HashMap} são muito mais rápidos no carregamento da informação para 
+memória, mantendo os tempos das queries praticamente inalterados, como é possível
+comprovar na tabela \ref{tab:benchesTH}.\\
+Foram também testados tempos de execução das Implementações da Interface \textit{List},
+nomeadamente \textit{ArrayList} e \textit{Vector}, visivel na tabela \ref{tab:benchesLV}
+não havendo diferenças notáveis, acabando assim por optar pela implementação 
+mais comum \textit{ArrayList}.\\
+Ao nível de leitura, foram efetuados benchmarks para comparar a performance de
+\textit{Files} e de \textit{BufferedReader} vistos em no apêndice \ref{chap:brf}, sendo o
+\textit{Files} mais lento e já que internamente \textit{Files} utiliza internamente
+\textit{BufferedReader}, acabamos por utilizar o \textit{BufferedReader} para a leitura
+dos ficheiros com a informação.
 
 \chapter{Conclusão}
 
@@ -305,7 +313,7 @@ nele presente.
     \end{center}
 \end{figure}
 
-\chapter{Benchmarks BufferedReader vs Files}
+\chapter{Benchmarks BufferedReader vs Files}\label{chap:brf}
 
 \begin{table}[H]
     \begin{center}
@@ -419,7 +427,7 @@ nele presente.
         \end{tabular}
         \caption{Tempo (em ms) das queries para um dado número de vendas, utilizando
         \textit{Vector} em vez de \textit{ArrayList}}
-        \label{tab:benches}
+        \label{tab:benchesLV}
     \end{center}
 \end{table}
 
@@ -455,7 +463,7 @@ nele presente.
         \end{tabular}
         \caption{Tempo (em ms) das queries para um dado número de vendas, utilizando
         \textit{TreeMap} em vez de \textit{HashMap}}
-        \label{tab:benches}
+        \label{tab:benchesTH}
     \end{center}
 \end{table}
 
