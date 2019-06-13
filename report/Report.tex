@@ -91,29 +91,28 @@ inerente a esta arquitetura.
 \subsection{Cliente}
 
 O módulo de Cliente tem uma API capaz de lidar com a informação de um cliente
-individual e respectiva informação relativa a onde efectuou compras, com vista
-à melhor resposta de queries que envolvam tal informação.
+individual, e sua respetiva validação. 
 
 \subsection{Clientes}
 
 O módulo de Clientes tem uma API capaz de lidar com a informação de todos os
 clientes, respectivo armazenamento e pesquisa. \\ 
 Como estrutura principal de armazenamento dos Clientes individuais, após testes 
-testar várias estruturas, optamos por escolher Hashtables da biblioteca GLib, 
-da Gnome.
+testar várias estruturas, optamos por utilizar os HashMaps presente na biblioteca
+\textit{java.util.Map}
 
 \subsection{Produto}
 
 À semelhança do módulo de Cliente, o módulo de Produto tem uma API desenhada
-para tratar da informação referente a um produto individual e informação de 
-onde foi vendido.
+para tratar da informação referente a um produto individual, bem como a sua 
+validação
 
 \subsection{Produtos}
 
 No módulo de Produtos, a API está construída de maneira a que seja capaz de
 lidar, de forma eficiente com o armazenamento e pesquisa de todos os produtos.\\
-Para este módulo, como no módulo de Clientes, decidimos utilizar as mesmas Hashtables
-da biblioteca GLib da Gnome.
+Para este módulo, como no módulo de Clientes, decidimos utilizar os mesmos HashMaps
+da biblioteca \textit{java.util.Map}
 
 \subsection{Venda}
 
@@ -151,7 +150,8 @@ filiais, ficheiros a ler, entre outros, que são lidas de um ficheiro de configs
 
 \subsection{GestVendasModel}
 
-O módulo GestVendasModel é o módulo que junta todos os acima descritos, contendo este uma estrutura
+O módulo GestVendasModel é o módulo que junta todos os acima descritos, 
+contendo este uma estrutura
 que contém um Catálogo de Produtos, um Catálogo de Clientes, uma estrutura Faturação e 
 uma List de Filiais. Este módulo faz a ponte entre todos os módulos internos e o 
 exterior, sendo este o módulo que ao qual o controlador faz pedidos, e tem 
@@ -240,7 +240,6 @@ vermelho basta escrever.
 
 \chapter{Arquitetura do projeto}
 
-
 \section{Modelo}
 
 O modelo tem como base dois grandes módulos, o módulo Filial e o módulo Facturação,
@@ -253,37 +252,14 @@ conhecer à camada da Apresentação.
 
 \chapter{Estruturas de dados}
 
-Como descrito no capítulo \ref{chap:api}, todas as nossas estruturas de dados consistem 
-em Hashtables da GLib, escolha feita após múltiplos testes empíricos de abordagens distintas.\\
-Numa abordagem inicial, na primeira fase do projeto, utilizamos arrays para 
-guardar os dados. Para esta abordagem, observamos tempos de leitura e validação de ficheiros
-superiores a 5 minutos.\\
-Numa segunda abordagem, no inicio da segunda fase, optamos por utilizar 
-Árvores Auto-Balanceadas da biblioteca GLib, onde os tempos de leitura e validação 
-dos ficheiros baixaram para cerca de 7 segundos, graças à pesquisa $O(log N)$,
-operação mais utilizada na validação das vendas.\\
-Como abordagem final, implementamos Hashtables, também da biblioteca GLib.
-Nesta, os valores não são armazenados de forma ordenada. No entanto,
-tal como concluímos com esta versão, com ferramentas tão otimizadas para a ordenação
-como o \textit{qsort()} da linguagem de programação C, a inserção ordenada acaba por ter
-um impacto demasiado negativo nos tempos de inserção.\\
-Por um lado, graças ao tempo de inserção e pesquisa $O(1)$, conseguimos reduzir
-o tempo de carregamento de ficheiros para menos de 4 segundos, como descrito
-na tabela \ref{tab:benches}, um melhoramento de aproximadamente 40\%.\\
-Por outro lado, graças à implementação otimizada das Hashtables na biblioteca em uso,
-percorrer todos os elementos desta, de acordo com os nossos testes, é tão rápido como
-na implementação anterior de AVLs. Tal resulta num tempo de resposta a queries
-inalterado quando comprado com a implementação anterior.\\
-Assim, com a utilização de Hashtables conseguimos uma melhoria de
-aproximadamente 40\% nos tempos de \textit{load} e manter os mesmos resultados nos
-tempos de resposta a queries.
+
 
 \chapter{Testes e Benchmarks}
 
 Durante a execução do nosso projeto, foram efetuados diversos testes, quer ao nível
 de formas de leitura do ficheiro, em particular, \textit{BufferedReader} e \textit{Files},
-bem como testes ao nível das diversas implementações das Interfaces \textit{Map<K,V>},
-\textit{Set<E>} e \textit{List<E>}
+bem como testes ao nível das diversas implementações das Interfaces \textit{Map},
+\textit{Set} e \textit{List}
 
 \section{Tempos de execução}
 
@@ -301,19 +277,31 @@ a conseguíssemos otimizar.
 Para concluir, conseguimos cumprir todos os requisitos propostos, conseguindo implementar
 todos os módulos e estrutura-los como pedido, sendo assim capaz de responder a todas as 
 queries da forma que nos pareceu mais eficiente.\\
-Como trabalho futuro, gostaríamos de conseguir melhorar os tempos de load de ficheiros,
-no caso do ficheiro de um milhão de vendas, para tempos inferiores a 2 segundos, e
-gostaríamos também de fazer ligeiras mudanças à estruturação das APIs de alguns dos 
-módulos, para no futuro, ser mais fácil de responder a novas queries caso fosse 
-necessário.
+Como trabalho futuro, gostariamos de melhorar a maneira da organização da informação 
+referente às filiais, de forma a baixar tempo de resposta a queries que utilizam informação
+nele presente.
 
 \appendix
 
-\chapter{Grafo de Dependências}
+\chapter{Diagramas de Classes}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=0.4\textwidth]{dependency.png}\par
-        \caption{Grafo de Dependências do projeto gerado pela ferramenta \textit{Doxygen}}
+        \includegraphics[width=1\textwidth]{modelGraph.png}\par
+        \caption{Diagrama de Classes do Model}
+    \end{center}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{viewGraph.png}\par
+        \caption{Diagrama de Classes do Controller}
+    \end{center}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{controllerGraph.png}\par
+        \caption{Diagrama de Classes do View}
     \end{center}
 \end{figure}
 
@@ -325,28 +313,42 @@ necessário.
             \hline
             & 1 Milhão & 3 Milhões & 5 Milhões \\
             \hline
-            Leitura BufferedReader & 162 & 434 & 750 \\
+            Leitura & 162 & 434 & 750 \\
             \hline
-            Leitura Files & 173 &  & 773 \\
+            Parse & 871 & 1884 & 3013 \\
             \hline
-            Parse BufferedReader & 871 & 1884 & 3013 \\
+            Validação & 1316 & 3120 & 4380 \\
             \hline
-            Parse Files & 861 & 1948 & 3017 \\
-            \hline
-            Validação BufferedReader & 1316 & 3120 & 4380 \\
-            \hline
-            Validação Files & 1139 & 2755 & 4380 \\
-            \hline
-            Validação Paralela BF & 795 & 1535 & 2203 \\
-            \hline
-            Validação Paralela Files & 828 & 1572 & 2222 \\
+            Validação Paralela & 795 & 1535 & 2203 \\
             \hline
 
         \end{tabular}
-        \caption{Tempo (em ms) de tempos de BufferedReader vs Files}
-        \label{tab:BFvsF}
+        \caption{Tempo (em ms) de tempos de BufferedReader} 
+        \label{tab:BF}
     \end{center}
 \end{table}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{| c | c | c | c |}
+            \hline
+            & 1 Milhão & 3 Milhões & 5 Milhões \\
+            \hline
+            Leitura & 173 & 480 & 773 \\
+            \hline
+            Parse & 861 & 1948 & 3017 \\
+            \hline
+            Validação & 1139 & 2755 & 4380 \\
+            \hline
+            Validação Paralela & 828 & 1572 & 2222 \\
+            \hline
+
+        \end{tabular}
+        \caption{Tempo (em ms) de tempos Files}
+        \label{tab:Files}
+    \end{center}
+\end{table}
+
 
 \chapter{Tabela de Tempos de Execução}
 
@@ -356,37 +358,106 @@ necessário.
             \hline
             & 1 Milhão & 3 Milhões & 5 Milhões \\
             \hline
-            Load Time & 3.30 & 8.88 & 14.22 \\
+            Load Time & 2002 & 4522 & 7359 \\
             \hline
-            Query 1.1 & 0.003 & 0.003 & 0.003 \\
+            Query 1 & 68 & 32 & 31 \\
             \hline
-            Query 1.2 & 0.00001 & 0.00003 & 0.00001 \\
+            Query 2 & 39 & 80 & 119 \\
             \hline
-            Query 1 & 0.004 & 0.003 & 0.004 \\
+            Query 3 & 55 & 20 & 14 \\
             \hline
-            Query 2 & 0.003 & 0.003 & 0.003 \\
+            Query 4 & 1 & 1 & 1 \\
             \hline
-            Query 3 & 0.0004 & 0.0003 & 0.0003 \\
+            Query 5 & 13 & 22 & 17 \\
             \hline
-            Query 4 & 0.00007 & 0.0001 & 0.00008 \\
+            Query 6 & 950 & 2306 & 3730 \\
             \hline
-            Query 5 & 0.000009 & 0.000008 & 0.000007 \\
+            Query 7 & 71 & 111 & 72 \\
             \hline
-            Query 6 & 0.00002 & 0.00002 & 0.000007 \\
+            Query 8 & 240 & 1115 & 1526 \\
             \hline
-            Query 7 & 0.0003 & 0.00005 & 0.00005 \\
+            Query 9 & 9 & 14 & 10 \\
             \hline
-            Query 8 & 0.194 & 0.193 & 0.194 \\
-            \hline
-            Query 9 & 0.00003 & 0.00003 & 0.00003 \\
-            \hline
-            Query 10 & 0.00003 & 0.00003 & 0.00003 \\
+            Query 10 & 45 & 100 & 230 \\
             \hline
 
         \end{tabular}
-        \caption{Tempo (em segundos) das queries para um dado número de vendas}
+        \caption{Tempo (em ms) das queries para um dado número de vendas}
         \label{tab:benches}
     \end{center}
 \end{table}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{| c | c | c | c |}
+            \hline
+            & 1 Milhão & 3 Milhões & 5 Milhões \\
+            \hline
+            Load Time & 2117 & 4824 & 7270 \\
+            \hline
+            Query 1 & 21 & 32 & 34 \\
+            \hline
+            Query 2 & 78 & 86 & 117 \\
+            \hline
+            Query 3 & 5 & 20 & 18 \\
+            \hline
+            Query 4 & 1 & 1 & 1 \\
+            \hline
+            Query 5 & 11 & 26 & 18 \\
+            \hline
+            Query 6 & 858 & 2405 & 3942 \\
+            \hline
+            Query 7 & 67 & 121 & 57 \\
+            \hline
+            Query 8 & 267 & 900 & 1418 \\
+            \hline
+            Query 9 & 7 & 5 & 10 \\
+            \hline
+            Query 10 & 33 & 104 & 176 \\
+            \hline
+
+        \end{tabular}
+        \caption{Tempo (em ms) das queries para um dado número de vendas, utilizando
+        \textit{Vector} em vez de \textit{ArrayList}}
+        \label{tab:benches}
+    \end{center}
+\end{table}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{| c | c | c | c |}
+            \hline
+            & 1 Milhão & 3 Milhões & 5 Milhões \\
+            \hline
+            Load Time & 5060 & 16100 & 25369 \\
+            \hline
+            Query 1 & 74 & 32 & 27 \\
+            \hline
+            Query 2 & 69 & 88 & 94 \\
+            \hline
+            Query 3 & 45 & 10 & 18 \\
+            \hline
+            Query 4 & 1 & 2 & 1 \\
+            \hline
+            Query 5 & 48 & 15 & 14 \\
+            \hline
+            Query 6 & 929 & 2528 & 3690 \\
+            \hline
+            Query 7 & 62 & 68 & 80 \\
+            \hline
+            Query 8 & 269 & 816 & 1430 \\
+            \hline
+            Query 9 & 7 & 5 & 10 \\
+            \hline
+            Query 10 & 50 & 111 & 155 \\
+            \hline
+
+        \end{tabular}
+        \caption{Tempo (em ms) das queries para um dado número de vendas, utilizando
+        \textit{TreeMap} em vez de \textit{HashMap}}
+        \label{tab:benches}
+    \end{center}
+\end{table}
+
 
 \end{document}
