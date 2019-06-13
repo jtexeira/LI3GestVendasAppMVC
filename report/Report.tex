@@ -4,7 +4,7 @@
 \usepackage{hyperref}
 \usepackage{a4wide}
 \hypersetup{pdftitle={GestVendas},
-pdfauthor={José Ferreira, João Teixeira},
+pdfauthor={João Teixeira, Emanuel Rodrigues, José Ferreira},
 colorlinks=true,
 urlcolor=blue,
 linkcolor=black}
@@ -22,7 +22,7 @@ linkcolor=black}
 
 \title{GestVendas\\ 
 \large Grupo Nº 56}
-\author{José Ferreira (A83683) \and João Teixeira (A85504)}
+\author{João Teixeira (A85504) \and Emanuel Rodrigues (A84776) \and José Ferreira (A83683)}
 \date{\today}
 
 \begin{center}
@@ -69,13 +69,13 @@ Com base nesses ficheiros é preciso responder a 12 queries fornecidas:
     \item Lista dos códigos de produtos não comprados.
     \item Número de vendas realizadas e clientes distintos, num dado mês e numa dada filial.
     \item Número de produtos distintos e gastos totais mês a mês para um dado cliente.
-    \item Determinar mês a mês quantas vezes foi comprado, por quantos clientes e o total facturado de um dado produto.
+    \item Determinar mês a mês quantas vezes foi comprado, por quantos clientes e o total faturado de um dado produto.
     \item Produtos mais comprados por um dado cliente e a sua quantidade.
     \item X produtos mais vendidos todo o ano e o número de clientes que o compraram.
     \item Determinar os 3 maiores compradores em cada filial.
     \item X clientes que compraram mais produtos diferentes e quantos.
     \item X clientes que compraram um dado produto e qual o valor gasto.
-    \item Calculara a facturação total de um dado produto, mês a mês e filial a filial.
+    \item Calculara a faturação total de um dado produto, mês a mês e filial a filial.
 \end{enumerate}
 
 \chapter{Módulos e API}\label{chap:api}
@@ -83,7 +83,7 @@ Com base nesses ficheiros é preciso responder a 12 queries fornecidas:
 Tendo em conta as características do projeto, concluímos que a arquitetura que melhor
 abrangia os critérios pedidos era a Arquitetura do tipo \textit{MVC} (Modelo, 
 Apresentação e Controlador).
-Um dos critérios que mais fez o grupo gravitar em direcção a esta escolha foi 
+Um dos critérios que mais fez o grupo gravitar em direção a esta escolha foi 
 a modularidade inerente a esta arquitetura.
 
 \section{Model}
@@ -96,35 +96,35 @@ individual, e sua respetiva validação.
 \subsection{Clientes}
 
 O módulo de Clientes tem uma API capaz de lidar com a informação de todos os
-clientes, respectivo armazenamento e pesquisa. \\ 
+clientes, respetivo armazenamento e pesquisa. \\ 
 Como estrutura principal de armazenamento dos Clientes individuais, após testes 
 testar várias estruturas, optamos por utilizar os HashMaps presente na biblioteca
-\textit{java.util.Map}
+\textit{java.util.Map}.
 
 \subsection{Produto}
 
 À semelhança do módulo de Cliente, o módulo de Produto tem uma API desenhada
 para tratar da informação referente a um produto individual, bem como a sua 
-validação
+validação.
 
 \subsection{Produtos}
 
 No módulo de Produtos, a API está construída de maneira a que seja capaz de
 lidar, de forma eficiente com o armazenamento e pesquisa de todos os produtos.\\
 Para este módulo, como no módulo de Clientes, decidimos utilizar os mesmos HashMaps
-da biblioteca \textit{java.util.Map}
+da biblioteca \textit{java.util.Map}.
 
 \subsection{Venda}
 
 No módulo de Venda, temos uma API capaz de dar parse de uma string com o formato 
 previamente definido, colocar numa estrutura com os campos necessários de maneira
 a preservar a informação, para posteriormente ser tratada pelo módulo de Filiais e
-Facturação.
+Faturação.
 
 \subsection{Factura}
 
 Neste módulo, a API está definida de forma a conseguir, a partir de uma Venda,
-criar/actualizar uma factura, contendo esta, a facturação relativa a um produto.
+criar/atualizar uma fatura, contendo esta, a faturação relativa a um produto.
 
 \subsection{Faturas}
 
@@ -146,7 +146,7 @@ concretamente que clientes adquiriram o produto.
 \subsection{Constantes}
 
 No módulo constantes, são guardadas todas as informações referentes ao número de
-filiais, ficheiros a ler, entre outros, que são lidas de um ficheiro de configs
+filiais, ficheiros a ler, entre outros, que são lidas de um ficheiro de configs.
 
 \subsection{GestVendasModel}
 
@@ -195,7 +195,7 @@ Model, sendo que tanto a View como o Model apenas conhecem o Controller.
 
 \subsection{GestVendasController}
 
-Esta classe actua como o controlador do nosso projeto. Para além de funcionar como a ponte entre
+Esta classe atua como o controlador do nosso projeto. Para além de funcionar como a ponte entre
 a lógica e a apresentação também cronometra o tempo demorado pela lógica a responder às queries pedidas
 e passa esse valor à \textit{View} para ser apresentado ao utilizador.
 
@@ -245,7 +245,7 @@ vermelho basta escrever.
 
 \section{Modelo}
 
-O modelo tem como base dois grandes módulos, o módulo Filial e o módulo Facturação,
+O modelo tem como base dois grandes módulos, o módulo Filial e o módulo Faturação,
 e têm como módulos auxiliares ambos os Catálogos de Produtos e de Clientes.\\
 Estes dois grandes módulos estão unidos num módulo mais geral, GereVendasModel, 
 e este recebe os pedidos do GereVendasController, e trata a informação contida 
@@ -258,7 +258,7 @@ esta conhecendo ou dada a conhecer à camada da Apresentação.
 Durante a execução do nosso projeto, foram efetuados diversos testes, quer ao nível
 de formas de leitura do ficheiro, em particular, \textit{BufferedReader} e \textit{Files},
 bem como testes ao nível das diversas implementações das Interfaces \textit{Map},
-\textit{Set} e \textit{List}
+\textit{Set} e \textit{List}.
 
 \section{Tempos de execução}
 
@@ -271,7 +271,7 @@ que os \textit{HashMap} são muito mais rápidos no carregamento da informação
 memória, mantendo os tempos das queries praticamente inalterados, como é possível
 comprovar na tabela \ref{tab:benchesTH}.\\
 Foram também testados tempos de execução das Implementações da Interface \textit{List},
-nomeadamente \textit{ArrayList} e \textit{Vector}, visivel na tabela \ref{tab:benchesLV}
+nomeadamente \textit{ArrayList} e \textit{Vector}, visível na tabela \ref{tab:benchesLV}
 não havendo diferenças notáveis, acabando assim por optar pela implementação 
 mais comum \textit{ArrayList}.\\
 Ao nível de leitura, foram efetuados benchmarks para comparar a performance de
@@ -285,7 +285,7 @@ dos ficheiros com a informação.
 Para concluir, conseguimos cumprir todos os requisitos propostos, conseguindo implementar
 todos os módulos e estrutura-los como pedido, sendo assim capaz de responder a todas as 
 queries da forma que nos pareceu mais eficiente.\\
-Como trabalho futuro, gostariamos de melhorar a maneira da organização da informação 
+Como trabalho futuro, gostaríamos de melhorar a maneira da organização da informação 
 referente às filiais, de forma a baixar tempo de resposta a queries que utilizam informação
 nele presente.
 
