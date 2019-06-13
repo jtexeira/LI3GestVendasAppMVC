@@ -88,6 +88,9 @@ a modularidade inerente a esta arquitetura.
 
 \section{Model}
 
+É na \textit{Package} \textit{Model} onde está toda a parte de algoritmos e dados, nunca 
+esta conhecendo ou dada a conhecer à camada da Apresentação.
+
 \subsection{Cliente}
 
 O módulo de Cliente tem uma API capaz de lidar com a informação de um cliente
@@ -205,6 +208,8 @@ Esta Package contém todas as classes de exceções utilizadas ao longo do proje
 Estas são usadas para assinalar, por exemplo, uma filial ou um cliente inválido passado
 como argumento.
 
+\pagebreak
+
 \section{Utils}
 
 A \textit{package} Utils contém classes que são utilizadas em várias partes do projeto e que não
@@ -240,18 +245,6 @@ vermelho basta escrever.
         \end{verbatim}
     \end{center}
 \end{figure}
-
-\chapter{Arquitetura do projeto}
-
-\section{Modelo}
-
-O modelo tem como base dois grandes módulos, o módulo Filial e o módulo Faturação,
-e têm como módulos auxiliares ambos os Catálogos de Produtos e de Clientes.\\
-Estes dois grandes módulos estão unidos num módulo mais geral, GereVendasModel, 
-e este recebe os pedidos do GereVendasController, e trata a informação contida 
-em todos os módulos, de forma a devolver-lhe a informação pedida da forma mais 
-eficiente. É nesta camada onde está toda a parte de algoritmos e dados, nunca 
-esta conhecendo ou dada a conhecer à camada da Apresentação.
 
 \chapter{Testes e Benchmarks}
 
